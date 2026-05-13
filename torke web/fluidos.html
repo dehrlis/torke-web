@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Fluidos & Capacidades — Base de Datos Técnica</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0D1117;
+    --surface: #161B22;
+    --surface2: #1C2128;
+    --surface3: #222830;
+    --border: #30363D;
+    --border-light: #3D444D;
+    --accent: #00D2BE;
+    --accent-dark: #00A896;
+    --accent-light: #4AFFE0;
+    --accent-glow: rgba(0, 210, 190, 0.15);
+    --silver: #A7B1B7;
+    --silver-light: #D8DEE2;
+    --silver-dark: #6B7580;
+    --text: #E6EDF3;
+    --text-secondary: #8B949E;
+    --danger: #F85149;
+    --warning: #D29922;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font-mono: 'Space Mono', monospace;
+    --font-sans: 'DM Sans', sans-serif;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+    --shadow-accent: 0 0 20px rgba(0, 210, 190, 0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 0 clamp(16px, 4vw, 40px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    background: rgba(13, 17, 23, 0.9);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 2px;
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .logo span { color: var(--silver); font-weight: 400; }
+
+  .header-meta {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    letter-spacing: 1px;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: clamp(32px, 6vw, 60px) clamp(16px, 4vw, 40px) clamp(24px, 4vw, 48px);
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: clamp(16px, 4vw, 40px);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    border-radius: 2px;
+  }
+
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 56px);
+    font-weight: 300;
+    line-height: 1.05;
+    margin-bottom: 16px;
+    letter-spacing: -2px;
+  }
+
+  .hero h1 strong {
+    color: var(--accent);
+    font-weight: 700;
+    text-shadow: 0 0 40px rgba(0, 210, 190, 0.3);
+  }
+
+  .hero p {
+    color: var(--text-secondary);
+    font-size: clamp(14px, 2vw, 16px);
+    max-width: 520px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ===== STATS BAR ===== */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: clamp(16px, 3vw, 24px) clamp(16px, 4vw, 40px);
+    max-width: 1200px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+
+  @media (min-width: 640px) {
+    .stats-bar {
+      display: flex;
+      gap: clamp(24px, 4vw, 48px);
+    }
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    padding-left: 12px;
+  }
+
+  .stat::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 24px;
+    background: var(--accent);
+    border-radius: 2px;
+    opacity: 0.4;
+  }
+
+  .stat-num {
+    font-family: var(--font-mono);
+    font-size: clamp(22px, 3vw, 28px);
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: -1px;
+    text-shadow: 0 0 20px rgba(0, 210, 190, 0.2);
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 500;
+  }
+
+  /* ===== MAIN LAYOUT ===== */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: clamp(16px, 3vw, 40px);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(16px, 3vw, 40px);
+  }
+
+  @media (min-width: 900px) {
+    .main {
+      grid-template-columns: 280px 1fr;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .main {
+      grid-template-columns: 300px 1fr;
+    }
+  }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: sticky;
+    top: 76px;
+    align-self: start;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
+  @media (max-width: 899px) {
+    .sidebar {
+      position: static;
+      max-height: none;
+      overflow-y: visible;
+    }
+  }
+
+  .search-box {
+    position: relative;
+  }
+
+  .search-box input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 14px 14px 14px 44px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-family: var(--font-sans);
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .search-box input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow), inset 0 1px 2px rgba(0,0,0,0.2);
+  }
+
+  .search-box input::placeholder { color: var(--silver-dark); }
+
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--silver-dark);
+    font-size: 16px;
+    pointer-events: none;
+  }
+
+  .filter-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: clamp(14px, 2vw, 20px);
+    transition: border-color 0.3s;
+  }
+
+  .filter-section:hover {
+    border-color: var(--border-light);
+  }
+
+  .filter-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .filter-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .filter-btn {
+    background: none;
+    border: 1px solid transparent;
+    color: var(--text);
+    padding: 9px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-sans);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 400;
+    min-height: 40px;
+    touch-action: manipulation;
+  }
+
+  .filter-btn:hover, .filter-btn:active {
+    background: var(--surface2);
+    border-color: var(--border);
+    color: var(--silver-light);
+  }
+
+  .filter-btn.active {
+    background: rgba(0, 210, 190, 0.08);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .filter-count {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--silver-dark);
+    background: var(--surface2);
+    padding: 3px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+
+  .filter-btn.active .filter-count {
+    background: rgba(0, 210, 190, 0.15);
+    color: var(--accent);
+  }
+
+  /* ===== VEHICLE LIST ===== */
+  .content { min-width: 0; }
+
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .result-count {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    letter-spacing: 1px;
+  }
+
+  .result-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-sans);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    touch-action: manipulation;
+    min-height: 36px;
+  }
+
+  .action-btn:hover, .action-btn:active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-glow);
+  }
+
+  .vehicles-grid {
+    display: grid;
+    gap: clamp(12px, 2vw, 16px);
+  }
+
+  /* ===== VEHICLE CARD ===== */
+  .vehicle-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .vehicle-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: transparent;
+    transition: background 0.3s;
+  }
+
+  .vehicle-card:hover {
+    border-color: var(--border-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg), 0 0 0 1px var(--border-light);
+  }
+
+  .vehicle-card:hover::before {
+    background: var(--accent);
+  }
+
+  .vehicle-card.open {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent), var(--shadow-accent);
+  }
+
+  .vehicle-card.open::before {
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+  }
+
+  .card-header {
+    padding: clamp(14px, 3vw, 20px) clamp(16px, 3vw, 24px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .card-left { 
+    display: flex; 
+    align-items: center; 
+    gap: clamp(10px, 2vw, 16px); 
+    flex: 1; 
+    min-width: 0; 
+  }
+
+  .brand-badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    border: 1px solid;
+  }
+
+  .brand-toyota { background: rgba(248, 81, 73, 0.1); color: var(--danger); border-color: rgba(248, 81, 73, 0.3); }
+  .brand-lexus  { background: rgba(0, 210, 190, 0.1); color: var(--accent); border-color: rgba(0, 210, 190, 0.3); }
+  .brand-daihatsu { background: rgba(74, 255, 224, 0.1); color: var(--accent-light); border-color: rgba(74, 255, 224, 0.3); }
+  .brand-subaru { background: rgba(180, 64, 240, 0.1); color: #c040f0; border-color: rgba(180, 64, 240, 0.3); }
+  .brand-suzuki { background: rgba(240, 140, 40, 0.1); color: #f08c28; border-color: rgba(240, 140, 40, 0.3); }
+
+  .card-info { min-width: 0; }
+
+  .card-name {
+    font-size: clamp(14px, 2.5vw, 16px);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: -0.3px;
+  }
+
+  .card-meta {
+    font-size: clamp(10px, 1.8vw, 12px);
+    color: var(--text-secondary);
+    margin-top: 4px;
+    display: flex;
+    gap: clamp(6px, 1.5vw, 12px);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .card-meta span { display: flex; align-items: center; gap: 4px; }
+
+  .card-meta .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    flex-shrink: 0;
+  }
+
+  .card-right {
+    display: flex;
+    align-items: center;
+    gap: clamp(6px, 1.5vw, 12px);
+    flex-shrink: 0;
+  }
+
+  .variants-pill {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: var(--silver);
+    background: var(--surface2);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .chevron {
+    color: var(--silver-dark);
+    font-size: 12px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--surface2);
+    flex-shrink: 0;
+  }
+
+  .vehicle-card:hover .chevron {
+    color: var(--accent);
+    background: var(--accent-glow);
+  }
+
+  .vehicle-card.open .chevron {
+    transform: rotate(180deg);
+    color: var(--accent);
+    background: var(--accent-glow);
+  }
+
+  /* ===== EXPANDED CONTENT ===== */
+  .card-body {
+    display: none;
+    border-top: 1px solid var(--border);
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .vehicle-card.open .card-body { display: block; }
+
+  /* ===== VARIANTS TABLE ===== */
+  .variants-section {
+    padding: clamp(14px, 3vw, 20px) clamp(16px, 3vw, 24px);
+    background: linear-gradient(180deg, rgba(0, 210, 190, 0.03) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  .variants-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -4px;
+    padding: 0 4px;
+  }
+
+  .variants-table {
+    width: 100%;
+    min-width: 500px;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: clamp(11px, 1.8vw, 12px);
+  }
+
+  .variants-table th {
+    text-align: left;
+    padding: 10px 8px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    white-space: nowrap;
+  }
+
+  .variants-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+    color: var(--text);
+    transition: background 0.2s;
+  }
+
+  .variants-table tr:hover td {
+    background: rgba(0, 210, 190, 0.03);
+  }
+
+  .variants-table tr:last-child td { border-bottom: none; }
+
+  .engine-chip {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    background: var(--surface2);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  /* ===== FLUIDS GRID ===== */
+  .fluids-section {
+    padding: clamp(14px, 3vw, 20px) clamp(16px, 3vw, 24px);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  @media (min-width: 480px) {
+    .fluids-section {
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+  }
+
+  @media (min-width: 768px) {
+    .fluids-section {
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+  }
+
+  .fluid-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fluid-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: transparent;
+    transition: background 0.3s;
+  }
+
+  .fluid-card:hover {
+    border-color: var(--border-light);
+    transform: translateY(-1px);
+  }
+
+  .fluid-card:hover::after {
+    background: var(--accent);
+  }
+
+  .fluid-name {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .fluid-icon {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px currentColor;
+  }
+
+  .fi-oil    { background: var(--accent); color: var(--accent); }
+  .fi-cool   { background: #40d4f0; color: #40d4f0; }
+  .fi-trans  { background: #f08040; color: #f08040; }
+  .fi-fuel   { background: var(--accent-light); color: var(--accent-light); }
+  .fi-ac     { background: #a040f0; color: #a040f0; }
+  .fi-other  { background: var(--silver-dark); color: var(--silver-dark); }
+
+  .fluid-rows { display: flex; flex-direction: column; gap: 6px; }
+
+  .fluid-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .fluid-row-label {
+    color: var(--text-secondary);
+    font-size: 11px;
+    flex: 1;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+
+  .fluid-row-right { text-align: right; flex-shrink: 0; }
+
+  .fluid-capacity {
+    font-family: var(--font-mono);
+    font-size: clamp(12px, 2vw, 14px);
+    font-weight: 700;
+    color: var(--accent);
+    text-shadow: 0 0 10px rgba(0, 210, 190, 0.2);
+  }
+
+  .fluid-type {
+    font-size: 10px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+
+  .fluid-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 6px 0;
+  }
+
+  /* ===== PDF BUTTON IN CARD ===== */
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    padding: 12px clamp(16px, 3vw, 24px);
+    border-top: 1px solid var(--border);
+    background: var(--surface2);
+    flex-wrap: wrap;
+  }
+
+  .pdf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: rgba(0, 210, 190, 0.08);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    touch-action: manipulation;
+  }
+
+  .pdf-btn:hover, .pdf-btn:active {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 0 16px rgba(0, 210, 190, 0.3);
+  }
+
+  .pdf-btn svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  /* ===== SOURCE NOTE ===== */
+  .source-note {
+    padding: 12px clamp(16px, 3vw, 24px);
+    border-top: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--surface2);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .market-badge {
+    font-size: 9px;
+    padding: 3px 10px;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    background: var(--surface3);
+    color: var(--silver);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state {
+    text-align: center;
+    padding: clamp(60px, 12vw, 100px) 20px;
+    color: var(--text-secondary);
+  }
+
+  .empty-state .icon {
+    font-size: clamp(40px, 8vw, 56px);
+    margin-bottom: 24px;
+    opacity: 0.2;
+    filter: grayscale(1);
+  }
+
+  .empty-state h3 {
+    font-size: clamp(18px, 3vw, 20px);
+    margin-bottom: 12px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .empty-state p {
+    font-size: clamp(13px, 2.5vw, 15px);
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ===== ADD BUTTON ===== */
+  .add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 16px;
+    background: rgba(0, 210, 190, 0.05);
+    border: 1px dashed rgba(0, 210, 190, 0.3);
+    border-radius: var(--radius);
+    color: var(--accent);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-sans);
+    margin-top: 8px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    touch-action: manipulation;
+    min-height: 52px;
+  }
+
+  .add-btn:hover, .add-btn:active {
+    background: rgba(0, 210, 190, 0.1);
+    border-style: solid;
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(0, 210, 190, 0.1);
+  }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    left: 32px;
+    background: var(--surface2);
+    border: 1px solid var(--accent);
+    color: var(--text);
+    padding: 14px 20px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    display: none;
+    z-index: 999;
+    box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0, 210, 190, 0.2);
+    max-width: 400px;
+    backdrop-filter: blur(10px);
+    margin: 0 auto;
+  }
+
+  @media (min-width: 640px) {
+    .toast {
+      left: auto;
+      margin: 0;
+    }
+  }
+
+  .toast.show { display: flex; gap: 12px; align-items: center; }
+
+  .toast-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--accent-glow);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--border-light);
+  }
+
+  /* ===== COMPARE BAR ===== */
+  .compare-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--accent);
+    padding: 12px clamp(16px, 4vw, 40px);
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 200;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
+    gap: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .compare-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .compare-info {
+      justify-content: center;
+    }
+    .compare-actions {
+      justify-content: center;
+    }
+  }
+
+  .compare-bar.show { display: flex; }
+
+  .compare-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .compare-count {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .compare-vehicles {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .compare-chip {
+    background: var(--accent-glow);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: var(--font-mono);
+  }
+
+  .compare-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 10px 24px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+    touch-action: manipulation;
+    min-height: 40px;
+    text-align: center;
+  }
+
+  .btn-primary:hover, .btn-primary:active {
+    background: var(--accent-light);
+    box-shadow: 0 0 20px rgba(0, 210, 190, 0.3);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    touch-action: manipulation;
+    min-height: 40px;
+    text-align: center;
+  }
+
+  .btn-secondary:hover, .btn-secondary:active {
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+
+  /* ===== CHECKBOX FOR COMPARE ===== */
+  .card-checkbox {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    margin-right: 2px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .card-checkbox:hover {
+    border-color: var(--accent);
+  }
+
+  .card-checkbox.checked {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+  }
+
+  .vehicle-card:hover .card-checkbox {
+    border-color: var(--border-light);
+  }
+
+  /* ===== TAGS ===== */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .tag-hev { background: rgba(0, 210, 190, 0.1); color: var(--accent); border: 1px solid rgba(0, 210, 190, 0.2); }
+  .tag-diesel { background: rgba(210, 153, 34, 0.1); color: var(--warning); border: 1px solid rgba(210, 153, 34, 0.2); }
+  .tag-gas { background: rgba(167, 177, 183, 0.1); color: var(--silver); border: 1px solid rgba(167, 177, 183, 0.2); }
+
+  /* ===== PRINT STYLES FOR PDF ===== */
+  @media print {
+    body { background: white !important; color: black !important; }
+    header, .sidebar, .result-actions, .compare-bar, .toast, .card-actions { display: none !important; }
+    .vehicle-card { border: 1px solid #ccc !important; break-inside: avoid; }
+    .card-body { display: block !important; }
+    .fluids-section { grid-template-columns: 1fr 1fr !important; }
+  }
+
+  /* ===== REDUCED MOTION ===== */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Fluid<span>DB</span></div>
+  <div class="header-meta" id="headerMeta">Cargando base de datos...</div>
+</header>
+
+<div class="hero">
+  <h1>Fluidos & <strong>Capacidades</strong><br>Base de Datos Técnica</h1>
+  <p>Especificaciones oficiales de fluidos, volúmenes y tipos para Toyota, Lexus y más marcas. Datos directos del manual del propietario.</p>
+</div>
+
+<div class="stats-bar" id="statsBar">
+  <div class="stat"><div class="stat-num" id="statVehicles">-</div><div class="stat-label">Vehículos</div></div>
+  <div class="stat"><div class="stat-num" id="statBrands">-</div><div class="stat-label">Marcas</div></div>
+  <div class="stat"><div class="stat-num" id="statYears">-</div><div class="stat-label">Años cubiertos</div></div>
+  <div class="stat"><div class="stat-num" id="statMarkets">-</div><div class="stat-label">Mercados</div></div>
+</div>
+
+<div class="main">
+  <aside class="sidebar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Buscar modelo, motor, código..." autocomplete="off">
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">Marca</div>
+      <div class="filter-group" id="brandFilters"></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">Mercado</div>
+      <div class="filter-group" id="marketFilters"></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">Tipo</div>
+      <div class="filter-group" id="typeFilters">
+        <button class="filter-btn active" data-type="all" onclick="setTypeFilter('all', this)">Todos <span class="filter-count" id="tc-all">-</span></button>
+        <button class="filter-btn" data-type="hev" onclick="setTypeFilter('hev', this)">Híbrido / HEV <span class="filter-count" id="tc-hev">-</span></button>
+        <button class="filter-btn" data-type="diesel" onclick="setTypeFilter('diesel', this)">Diésel <span class="filter-count" id="tc-diesel">-</span></button>
+        <button class="filter-btn" data-type="gas" onclick="setTypeFilter('gas', this)">Gasolina <span class="filter-count" id="tc-gas">-</span></button>
+      </div>
+    </div>
+
+    <button class="add-btn" onclick="showToast()">+ Agregar vehículo</button>
+  </aside>
+
+  <div class="content">
+    <div class="result-header">
+      <div class="result-count" id="resultCount">Mostrando todos</div>
+      <div class="result-actions">
+        <button class="action-btn" onclick="toggleCompareMode()" id="compareToggle">⚖️ Comparar</button>
+        <button class="action-btn" onclick="exportData()">📥 Exportar</button>
+      </div>
+    </div>
+    <div class="vehicles-grid" id="vehiclesList"></div>
+  </div>
+</div>
+
+<div class="compare-bar" id="compareBar">
+  <div class="compare-info">
+    <span class="compare-count" id="compareCount">0 seleccionados</span>
+    <div class="compare-vehicles" id="compareChips"></div>
+  </div>
+  <div class="compare-actions">
+    <button class="btn-secondary" onclick="clearCompare()">Cancelar</button>
+    <button class="btn-primary" onclick="executeCompare()">Comparar ahora</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <div class="toast-icon">🔧</div>
+  <div>Función en desarrollo. Próximamente podrás agregar vehículos directamente desde aquí.</div>
+</div>
+
+<script>
+// BASE DE DATOS
+const DB = [{"id": "4runner_180u", "brand": "Toyota", "model": "4Runner", "generation": "180", "years": "1995-2002", "market": "us", "variants": [{"code": "RZN18#", "engine": "3RZ-FE", "displacement": "2.7i", "power_kw": 99, "drive": "RWD/4WD", "trans": "5MT/4AT"}, {"code": "VZN18#", "engine": "5VZ-FE", "displacement": "3.4i", "power_kw": 142, "drive": "RWD/4WD", "trans": "5MT/4AT"}], "fluids": {"engine_oil": [{"spec": "3RZ-FE", "capacity_l": 5.4, "type": "API SJ"}, {"spec": "5VZ-FE", "capacity_l": 5.2, "type": "API SJ"}], "coolant": [{"spec": "3RZ-FE", "capacity_l": "10.0 / 11.0", "note": "std / con calef. trasero"}, {"spec": "5VZ-FE", "capacity_l": "8.0 / 9.0", "note": "std / con calef. trasero"}], "manual_transmission": [{"spec": "3RZ-FE 2WD/4WD", "capacity_l": "2.6 / 2.5", "type": "API GL-4/5 SAE 75W-90"}, {"spec": "5VZ-FE", "capacity_l": 2.2, "type": "API GL-4/5 SAE 75W-90"}], "automatic_transmission": [{"spec": "2WD", "capacity_l": "1.6 (reempl.)", "type": "ATF Dexron II / III"}, {"spec": "4WD", "capacity_l": "2.0 (reempl.)", "type": "ATF Dexron II / III"}], "transfer": [{"spec": "Control palanca/botón", "capacity_l": 1.2, "type": "Gear oil API GL-4..5 SAE 75W-90"}, {"spec": "Control palanca", "capacity_l": 1.0, "type": "Gear oil API GL-4..5 SAE 75W-90"}], "front_differential": [{"spec": "", "capacity_l": 1.15, "type": "Hypoid gear oil API GL-5 SAE 80W-90"}], "rear_differential": [{"spec": "2WD", "capacity_l": 2.75, "type": "Hypoid gear oil API GL-5 SAE 80W-90"}, {"spec": "4WD s/bloqueo", "capacity_l": 2.45, "type": "Hypoid gear oil API GL-5 SAE 80W-90"}, {"spec": "4WD c/bloqueo", "capacity_l": 2.75, "type": "Hypoid gear oil API GL-5 SAE 80W-90"}], "fuel_tank": [{"spec": "3RZ-FE", "capacity_l": 70, "type": "RON 91"}, {"spec": "5VZ-FE", "capacity_l": 70, "type": "RON 91"}]}}, {"id": "4runner_210u", "brand": "Toyota", "model": "4Runner", "generation": "210", "years": "2002-2009", "market": "us", "variants": [{"code": "GRN21#", "engine": "1GR-FE", "displacement": "4.0i", "power_kw": 175, "drive": "RWD/4WD", "trans": "5AT"}, {"code": "UZN21#", "engine": "2UZ-FE", "displacement": "4.7i", "power_kw": 212, "drive": "RWD/4WD", "trans": "4AT"}], "fluids": {"engine_oil": [{"spec": "1GR-FE", "capacity_l": 5.2, "type": "API SL / ILSAC"}, {"spec": "2UZ-FE", "capacity_l": 6.2, "type": "API SL / ILSAC"}], "coolant": [{"spec": "1GR-FE", "capacity_l": 9.8}, {"spec": "2UZ-FE", "capacity_l": 12.3}], "automatic_transmission": [{"spec": "4AT", "capacity_l": "2.0 (reempl.)", "type": "Toyota ATF Type T-IV"}, {"spec": "5AT", "capacity_l": "3.0 (reempl.)", "type": "Toyota ATF WS"}], "transfer": [{"spec": "", "capacity_l": 1.4, "type": "Hypoid gear oil API GL-5 SAE 75W-90"}], "front_differential": [{"spec": "1GR-FE", "capacity_l": 1.5, "type": "Hypoid gear oil API GL-5 SAE 75W-90"}, {"spec": "2UZ-FE", "capacity_l": 1.4, "type": "Hypoid gear oil API GL-5 SAE 75W-90"}], "rear_differential": [{"spec": "", "capacity_l": 3.05, "type": "Hypoid gear oil API GL-5 SAE 80W-90"}], "fuel_tank": [{"spec": "1GR-FE / 2UZ-FE", "capacity_l": 87, "type": "RON 91"}]}}, {"id": "4runner_280u", "brand": "Toyota", "model": "4Runner", "generation": "280", "years": "2009-2024", "market": "us", "variants": [{"code": "GRN28#", "engine": "1GR-FE", "displacement": "4.0i", "power_kw": 175, "drive": "RWD/4WD", "trans": "5AT"}], "fluids": {"engine_oil": [{"spec": "1GR-FE", "capacity_l": 6.2, "type": "ILSAC GF-5"}], "coolant": [{"spec": "", "capacity_l": 10.5}], "automatic_transmission": [{"spec": "5AT", "capacity_l": 10.7, "type": "Toyota ATF WS"}], "transfer": [{"spec": "Part-Time 4WD", "capacity_l": 1.0, "type": "Toyota Transfer Gear Oil LF SAE 75W"}, {"spec": "Full-Time 4WD", "capacity_l": 1.4, "type": "Toyota Transfer Gear Oil LF SAE 75W"}], "front_differential": [{"spec": "Part-Time", "capacity_l": 1.55, "type": "Toyota Diff. Gear Oil LT GL-5 75W-85"}, {"spec": "Full-Time", "capacity_l": 1.4, "type": "Toyota Diff. Gear Oil LT GL-5 75W-85"}], "rear_differential": [{"spec": "s/bloqueo diferencial", "capacity_l": 2.7, "type": "Toyota Diff. Gear Oil LT GL-5 75W-85"}, {"spec": "c/bloqueo diferencial", "capacity_l": 2.65, "type": "Toyota Diff. Gear Oil LT GL-5 75W-85"}], "fuel_tank": [{"spec": "1GR-FE", "capacity_l": 87, "type": "RON 91"}]}}, {"id": "4runner_500u", "brand": "Toyota", "model": "4Runner", "generation": "500", "years": "2025-", "market": "us", "variants": [{"code": "TZNA5#", "engine": "T24A-FTS", "displacement": "2.4i Turbo", "power_kw": 207, "drive": "2WD/4WD", "trans": "8AT"}, {"code": "TZNH55 HEV", "engine": "T24A-FTS HEV", "displacement": "2.4i Turbo HEV", "power_kw": 243, "drive": "4WD", "trans": "8AT"}], "fluids": {"engine_oil": [{"spec": "T24A-FTS (Gasolina y HEV)", "capacity_l": 5.6, "type": "ILSAC GF-6A"}], "coolant": [{"spec": "Gasolina", "capacity_l": "12.0–12.1", "type": "Toyota SLLC"}, {"spec": "HEV — Motor", "capacity_l": 11.4, "type": "Toyota SLLC"}, {"spec": "HEV — Inversor (PCU)", "capacity_l": 2.3, "type": "Toyota SLLC"}], "automatic_transmission": [{"spec": "8AT (Gasolina)", "capacity_l": 11.5, "type": "Toyota ATF WS"}, {"spec": "8AT (HEV)", "capacity_l": 12.5, "type": "Toyota ATF WS"}], "transfer": [{"spec": "Part-Time 4WD", "capacity_l": 1.1, "type": "Toyota Transfer Gear Oil LF 75W"}, {"spec": "Full-Time 4WD", "capacity_l": 1.4, "type": "Toyota Transfer Gear Oil LF 75W"}], "front_differential": [{"spec": "Part-Time 4WD", "capacity_l": 1.3, "type": "Toyota Diff. Gear Oil LT GL-5 75W-85"}, {"spec": "Full-Time 4WD", "capacity_l": 1.2, "type": "Toyota Diff. Gear Oil LT GL-5 75W-85"}], "rear_differential": [{"spec": "Standard", "capacity_l": 5.6, "type": "Toyota Diff. Gear Oil LT GL-5 75W-85"}, {"spec": "Trailhunter (HEV)", "capacity_l": 6.5, "type": "Toyota Diff. Gear Oil LT GL-5 75W-85"}], "fuel_tank": [{"spec": "T24A-FTS", "capacity_l": 72, "type": "RON 91"}]}}, {"id": "allex_120", "brand": "Toyota", "model": "Corolla Runx / Allex", "generation": "120", "years": "2001-2006", "market": "jp", "variants": [{"code": "NZE121", "engine": "1NZ-FE", "displacement": "1.5i", "power_kw": 81, "drive": "2WD", "trans": "4AT"}, {"code": "ZZE122", "engine": "1ZZ-FE", "displacement": "1.8i", "power_kw": 97, "drive": "2WD", "trans": "4AT"}, {"code": "ZZE123", "engine": "2ZZ-GE", "displacement": "1.8i", "power_kw": 140, "drive": "2WD", "trans": "6MT/4AT"}, {"code": "NZE124", "engine": "1NZ-FE", "displacement": "1.5i", "power_kw": 77, "drive": "4WD", "trans": "4AT"}, {"code": "ZZE124", "engine": "1ZZ-FE", "displacement": "1.8i", "power_kw": 92, "drive": "4WD", "trans": "4AT"}], "fluids": {"engine_oil": [{"spec": "1NZ-FE", "capacity_l": 3.7, "type": "API SJ..SL / ILSAC GF-3"}, {"spec": "1ZZ-FE", "capacity_l": 3.7, "type": "API SJ..SL / ILSAC GF-3"}, {"spec": "2ZZ-GE", "capacity_l": 4.4, "type": "API SJ..SL / ILSAC GF-3"}], "coolant": [{"spec": "1NZ-FE", "capacity_l": 5.9}, {"spec": "1ZZ-FE", "capacity_l": 6.5}, {"spec": "2ZZ-GE", "capacity_l": 6.7}], "automatic_transmission": [{"spec": "1NZ-FE / 1ZZ-FE", "capacity_l": 6.9, "type": "Toyota ATF Type T-IV"}, {"spec": "2ZZ-GE", "capacity_l": 8.3, "type": "Toyota ATF Type T-IV"}], "manual_transmission": [{"spec": "2ZZ-GE", "capacity_l": 2.3, "type": "Toyota MG Gear Oil Spec.II GL-3 75W-90"}], "transfer": [{"spec": "1NZ-FE / 1ZZ-FE (4WD)", "capacity_l": 0.9, "type": "Toyota Gear Oil Super GL-5 75W-90"}], "rear_differential": [{"spec": "4WD", "capacity_l": 0.5, "type": "Toyota Hypoid Gear Oil SX GL-5 85W-90"}], "ac_refrigerant": [{"spec": "hasta 09.2002", "capacity": "530 g", "type": "HFC-134a"}, {"spec": "09.2002+", "capacity": "500 g", "type": "HFC-134a"}], "washer_tank": [{"spec": "", "capacity_l": 2.5}], "fuel_tank": [{"spec": "1NZ-FE / 1ZZ-FE", "capacity_l": 50, "type": "Regular (RON 91)"}, {"spec": "2ZZ-GE", "capacity_l": 50, "type": "Premium (RON 95)"}]}}, {"id": "agya_2", "brand": "Toyota", "model": "Agya / Wigo", "generation": "A351", "years": "2023-", "market": "gen", "variants": [{"code": "A351", "engine": "WA-VE", "displacement": "1.2i", "power_kw": 64, "drive": "FWD", "trans": "MT/CVT"}], "fluids": {"engine_oil": [{"spec": "WA-VE", "capacity_l": 3.4, "type": "API SL..SP / ILSAC GF-6A"}], "coolant": [{"spec": "MT / AT", "capacity_l": "3.6 / 3.8"}], "manual_transmission": [{"spec": "", "capacity_l": 1.4, "type": "Gear oil GL-4 80W"}], "cvt": [{"spec": "", "capacity_l": 6.0, "type": "Toyota CVT Fluid FE"}], "fuel_tank": [{"spec": "WA-VE", "capacity_l": 36, "type": "RON 92"}]}}, {"id": "premio_240", "brand": "Toyota", "model": "Allion / Premio", "generation": "240", "years": "2001-2007", "market": "jp", "variants": [{"code": "NZT240", "engine": "1NZ-FE", "displacement": "1.5i", "power_kw": 80, "drive": "2WD", "trans": "4AT"}, {"code": "ZZT240", "engine": "1ZZ-FE", "displacement": "1.8i", "power_kw": 97, "drive": "2WD", "trans": "4AT"}, {"code": "ZZT245", "engine": "1ZZ-FE", "displacement": "1.8i", "power_kw": 92, "drive": "4WD", "trans": "4AT"}, {"code": "AZT240", "engine": "1AZ-FSE", "displacement": "2.0i", "power_kw": 114, "drive": "2WD", "trans": "CVT"}], "fluids": {"engine_oil": [{"spec": "1NZ-FE", "capacity_l": 3.7, "type": "API SL"}, {"spec": "1ZZ-FE", "capacity_l": 3.7, "type": "API SL"}, {"spec": "1AZ-FSE", "capacity_l": 4.2, "type": "API SL"}], "coolant": [{"spec": "1NZ-FE", "capacity_l": 6.3}, {"spec": "1ZZ-FE 2WD/4WD", "capacity_l": "6.9 / 6.5"}, {"spec": "1AZ-FSE", "capacity_l": 7.0}], "automatic_transmission": [{"spec": "1NZ-FE", "capacity_l": 6.85, "type": "Toyota ATF Type T-IV"}, {"spec": "1ZZ-FE", "capacity_l": 6.88, "type": "Toyota ATF Type T-IV"}], "cvt": [{"spec": "1AZ-FSE", "capacity_l": 5.6, "type": "Toyota CVT Fluid TC"}], "transfer": [{"spec": "4WD", "capacity_l": 0.9, "type": "Toyota Gear Oil Super GL-5 75W-90"}], "rear_differential": [{"spec": "4WD", "capacity_l": 0.5, "type": "Toyota Hypoid Gear Oil SX GL-5 85W-90"}], "ac_refrigerant": [{"spec": "", "capacity": "520 g", "type": "HFC-134a"}], "washer_tank": [{"spec": "", "capacity_l": 3.5}], "fuel_tank": [{"spec": "Todos", "capacity_l": 60, "type": "Regular (RON 91)"}]}}, {"id": "allion_260", "brand": "Toyota", "model": "Allion / Premio", "generation": "260", "years": "2007-2021", "market": "jp", "variants": [{"code": "NZT260", "engine": "1NZ-FE", "displacement": "1.5i", "power_kw": 81, "drive": "2WD", "trans": "CVT"}, {"code": "ZRT260 2007-10", "engine": "2ZR-FE", "displacement": "1.8i", "power_kw": 100, "drive": "2WD", "trans": "CVT"}, {"code": "ZRT265 2007-10", "engine": "2ZR-FE", "displacement": "1.8i", "power_kw": 92, "drive": "4WD", "trans": "CVT"}, {"code": "ZRT260 2010+", "engine": "2ZR-FAE", "displacement": "1.8i", "power_kw": 105, "drive": "2WD", "trans": "CVT"}, {"code": "ZRT265 2010+", "engine": "2ZR-FAE", "displacement": "1.8i", "power_kw": 96, "drive": "4WD", "trans": "CVT"}, {"code": "ZRT261", "engine": "3ZR-FAE", "displacement": "2.0i", "power_kw": 116, "drive": "2WD", "trans": "CVT"}], "fluids": {"engine_oil": [{"spec": "1NZ-FE", "capacity_l": 3.7, "type": "API SL..SN / ILSAC GF-4..5"}, {"spec": "2ZR-FE / 2ZR-FAE", "capacity_l": 4.2, "type": "API SL..SN / ILSAC GF-4..5"}, {"spec": "3ZR-FAE", "capacity_l": 4.2, "type": "API SL..SN / ILSAC GF-4..5"}], "coolant": [{"spec": "1NZ-FE", "capacity_l": 5.3}, {"spec": "2ZR-FE / 2ZR-FAE / 3ZR-FAE", "capacity_l": 5.4}], "cvt": [{"spec": "1NZ-FE hasta 2013", "capacity_l": 8.09, "type": "Toyota CVT Fluid TC"}, {"spec": "1NZ-FE 2013+", "capacity_l": 7.5, "type": "Toyota CVT Fluid FE"}, {"spec": "2ZR-FE 2WD", "capacity_l": 8.11, "type": "Toyota CVT Fluid TC"}, {"spec": "2ZR-FE 4WD", "capacity_l": 7.98, "type": "Toyota CVT Fluid TC"}, {"spec": "2ZR-FAE 2WD hasta 2013", "capacity_l": 8.11, "type": "Toyota CVT Fluid TC"}, {"spec": "2ZR-FAE 4WD hasta 2013", "capacity_l": 7.98, "type": "Toyota CVT Fluid TC"}, {"spec": "2ZR-FAE 2WD 2013+", "capacity_l": 8.0, "type": "Toyota CVT Fluid FE"}, {"spec": "2ZR-FAE 4WD 2013+", "capacity_l": 7.9, "type": "Toyota CVT Fluid FE"}, {"spec": "3ZR-FAE hasta 2014", "capacity_l": 8.7, "type": "Toyota CVT Fluid TC"}, {"spec": "3ZR-FAE 2014+", "capacity_l": 8.7, "type": "Toyota CVT Fluid FE"}], "transfer": [{"spec": "4WD", "capacity_l": 0.9, "type": "Toyota Gear Oil Super API GL-5 SAE 75W-90"}], "rear_differential": [{"spec": "4WD hasta 2015", "capacity_l": 0.5, "type": "Toyota Hypoid Gear Oil SX GL-5 85W-90"}, {"spec": "4WD 2015+", "capacity_l": 0.5, "type": "Toyota Diff. Gear Oil LT GL-5 75W-85"}], "ac_refrigerant": [{"spec": "", "capacity": "440 g", "type": "HFC-134a"}], "washer_tank": [{"spec": "", "capacity_l": 2.5}], "fuel_tank": [{"spec": "Todos", "capacity_l": 60, "type": "Regular (RON 91)"}]}}];
+
+let activeFilters = { brand: 'all', market: 'all', type: 'all' };
+let searchQuery = '';
+let openCards = new Set();
+let compareMode = false;
+let selectedForCompare = new Set();
+
+const marketLabel = { jp: 'Japón', us: 'EE.UU.', eu: 'Europa', au: 'Australia', cn: 'China', gen: 'Global' };
+
+function getBrandClass(brand) {
+  const map = { Toyota: 'brand-toyota', Lexus: 'brand-lexus', Daihatsu: 'brand-daihatsu', Subaru: 'brand-subaru', Suzuki: 'brand-suzuki' };
+  return map[brand] || 'brand-toyota';
+}
+
+function isHEV(v) {
+  return v.variants.some(va => va.engine && (va.engine.toLowerCase().includes('fxe') || va.engine.toLowerCase().includes('fxs') || va.displacement.toLowerCase().includes('hev') || va.displacement.toLowerCase().includes('phev')));
+}
+
+function isDiesel(v) {
+  return v.variants.some(va => va.displacement.toLowerCase().includes('d') || va.engine.toLowerCase().includes('kd') || va.engine.toLowerCase().includes('gd') || va.engine.toLowerCase().includes('vd') || va.engine.toLowerCase().includes('nd') || va.engine.toLowerCase().includes('f33'));
+}
+
+const FLUID_CONFIG = {
+  engine_oil:           { label: 'Aceite Motor', icon: 'fi-oil' },
+  coolant:              { label: 'Refrigerante', icon: 'fi-cool' },
+  automatic_transmission: { label: 'ATF (Automático)', icon: 'fi-trans' },
+  manual_transmission:  { label: 'Caja Manual', icon: 'fi-trans' },
+  cvt:                  { label: 'CVT Fluid', icon: 'fi-trans' },
+  transfer:             { label: 'Transfer / Caja Transf.', icon: 'fi-trans' },
+  front_differential:   { label: 'Diferencial Delantero', icon: 'fi-other' },
+  rear_differential:    { label: 'Diferencial Trasero', icon: 'fi-other' },
+  ac_refrigerant:       { label: 'Refrigerante A/C', icon: 'fi-ac' },
+  washer_tank:          { label: 'Depósito Limpia', icon: 'fi-cool' },
+  fuel_tank:            { label: 'Depósito Combustible', icon: 'fi-fuel' }
+};
+
+function init() {
+  buildFilters();
+  updateStats();
+  render();
+  document.getElementById('searchInput').addEventListener('input', e => {
+    searchQuery = e.target.value.toLowerCase();
+    render();
+  });
+}
+
+function buildFilters() {
+  const brands = [...new Set(DB.map(v => v.brand))].sort();
+  const bContainer = document.getElementById('brandFilters');
+  const allBtn = document.createElement('button');
+  allBtn.className = 'filter-btn active';
+  allBtn.innerHTML = `Todos <span class="filter-count">${DB.length}</span>`;
+  allBtn.onclick = () => setBrandFilter('all', allBtn);
+  bContainer.appendChild(allBtn);
+  brands.forEach(b => {
+    const count = DB.filter(v => v.brand === b).length;
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.innerHTML = `${b} <span class="filter-count">${count}</span>`;
+    btn.onclick = () => setBrandFilter(b, btn);
+    bContainer.appendChild(btn);
+  });
+
+  const markets = [...new Set(DB.map(v => v.market))].sort();
+  const mContainer = document.getElementById('marketFilters');
+  const allMBtn = document.createElement('button');
+  allMBtn.className = 'filter-btn active';
+  allMBtn.innerHTML = `Todos <span class="filter-count">${DB.length}</span>`;
+  allMBtn.onclick = () => setMarketFilter('all', allMBtn);
+  mContainer.appendChild(allMBtn);
+  markets.forEach(m => {
+    const count = DB.filter(v => v.market === m).length;
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.innerHTML = `${marketLabel[m] || m} <span class="filter-count">${count}</span>`;
+    btn.onclick = () => setMarketFilter(m, btn);
+    mContainer.appendChild(btn);
+  });
+}
+
+function updateStats() {
+  const brands = new Set(DB.map(v => v.brand));
+  const markets = new Set(DB.map(v => v.market));
+  document.getElementById('statVehicles').textContent = DB.length;
+  document.getElementById('statBrands').textContent = brands.size;
+  document.getElementById('statYears').textContent = '2004–2024';
+  document.getElementById('statMarkets').textContent = markets.size;
+  document.getElementById('headerMeta').textContent = DB.length + ' modelos · v2.0 Mercedes-AMG F1 Edition';
+}
+
+function setBrandFilter(brand, btn) {
+  activeFilters.brand = brand;
+  document.querySelectorAll('#brandFilters .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function setMarketFilter(market, btn) {
+  activeFilters.market = market;
+  document.querySelectorAll('#marketFilters .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function setTypeFilter(type, btn) {
+  activeFilters.type = type;
+  document.querySelectorAll('#typeFilters .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function getFiltered() {
+  return DB.filter(v => {
+    if (activeFilters.brand !== 'all' && v.brand !== activeFilters.brand) return false;
+    if (activeFilters.market !== 'all' && v.market !== activeFilters.market) return false;
+    if (activeFilters.type === 'hev' && !isHEV(v)) return false;
+    if (activeFilters.type === 'diesel' && !isDiesel(v)) return false;
+    if (activeFilters.type === 'gas' && (isHEV(v) || isDiesel(v))) return false;
+    if (searchQuery) {
+      const hay = (v.brand + ' ' + v.model + ' ' + v.generation + ' ' + v.years + ' ' + v.variants.map(va => va.code + ' ' + va.engine).join(' ')).toLowerCase();
+      if (!hay.includes(searchQuery)) return false;
+    }
+    return true;
+  });
+}
+
+function toggleCompareMode() {
+  compareMode = !compareMode;
+  const btn = document.getElementById('compareToggle');
+  if (compareMode) {
+    btn.style.borderColor = 'var(--accent)';
+    btn.style.color = 'var(--accent)';
+    btn.style.background = 'var(--accent-glow)';
+    showToastCustom('Modo comparación activado. Selecciona hasta 3 vehículos.');
+  } else {
+    btn.style.borderColor = '';
+    btn.style.color = '';
+    btn.style.background = '';
+    selectedForCompare.clear();
+    updateCompareBar();
+  }
+  render();
+}
+
+function toggleVehicleCompare(id, event) {
+  event.stopPropagation();
+  if (selectedForCompare.has(id)) {
+    selectedForCompare.delete(id);
+  } else if (selectedForCompare.size < 3) {
+    selectedForCompare.add(id);
+  } else {
+    showToastCustom('Máximo 3 vehículos para comparar');
+    return;
+  }
+  updateCompareBar();
+  render();
+}
+
+function updateCompareBar() {
+  const bar = document.getElementById('compareBar');
+  const count = document.getElementById('compareCount');
+  const chips = document.getElementById('compareChips');
+  if (selectedForCompare.size === 0) {
+    bar.classList.remove('show');
+    return;
+  }
+  bar.classList.add('show');
+  count.textContent = `${selectedForCompare.size} seleccionado${selectedForCompare.size > 1 ? 's' : ''}`;
+  chips.innerHTML = Array.from(selectedForCompare).map(id => {
+    const v = DB.find(x => x.id === id);
+    return `<span class="compare-chip">${v.brand} ${v.model}</span>`;
+  }).join('');
+}
+
+function clearCompare() {
+  selectedForCompare.clear();
+  compareMode = false;
+  document.getElementById('compareToggle').style.borderColor = '';
+  document.getElementById('compareToggle').style.color = '';
+  document.getElementById('compareToggle').style.background = '';
+  updateCompareBar();
+  render();
+}
+
+function executeCompare() {
+  if (selectedForCompare.size < 2) {
+    showToastCustom('Selecciona al menos 2 vehículos para comparar');
+    return;
+  }
+  showToastCustom(`Comparando ${selectedForCompare.size} vehículos... (Próximamente)`);
+}
+
+function exportData() {
+  const filtered = getFiltered();
+  const dataStr = JSON.stringify(filtered, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'fluidos-vehiculos.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToastCustom('Datos exportados correctamente');
+}
+
+// ===== PDF GENERATION =====
+function generateVehiclePDF(id) {
+  const v = DB.find(x => x.id === id);
+  if (!v) return;
+
+  showToastCustom('Generando PDF...');
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+  const W = 210, M = 14;
+  const CW = W - M * 2;
+  let y = 0;
+
+  const TEAL = [0, 180, 160];
+  const DARK = [20, 25, 35];
+  const GRAY = [100, 110, 120];
+  const LGRAY = [240, 242, 245];
+  const WHITE = [255, 255, 255];
+
+  const tags = [];
+  if (isHEV(v)) tags.push('HEV');
+  if (isDiesel(v)) tags.push('DIESEL');
+  if (!isHEV(v) && !isDiesel(v)) tags.push('GASOLINA');
+
+  const marketLabel = { jp: 'Japón', us: 'EE.UU.', eu: 'Europa', au: 'Australia', cn: 'China', gen: 'Global' };
+
+  const addPage = () => { doc.addPage(); y = 14; };
+  const checkY = (need) => { if (y + need > 280) addPage(); };
+
+  // ── HEADER ──────────────────────────────────────────────────────────────
+  doc.setFillColor(...DARK);
+  doc.rect(0, 0, W, 42, 'F');
+
+  doc.setFillColor(...TEAL);
+  doc.rect(0, 0, 5, 42, 'F');
+
+  // Logo
+  doc.setTextColor(...TEAL);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.text('TALLER TORKE', M, 10);
+  doc.setTextColor(160, 170, 180);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.text('torke.com · FluidDB · Especificación Técnica', M, 15);
+
+  // Modelo
+  doc.setTextColor(...WHITE);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(20);
+  doc.text(`${v.brand} ${v.model}`, M, 28);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(180, 190, 200);
+  doc.text(`Generación ${v.generation}  ·  ${v.years}  ·  ${marketLabel[v.market] || v.market}  ·  ${tags.join(' / ')}`, M, 35);
+
+  y = 52;
+
+  // ── VARIANTES ───────────────────────────────────────────────────────────
+  doc.setFillColor(...TEAL);
+  doc.rect(M, y, CW, 7, 'F');
+  doc.setTextColor(...WHITE);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.text('VARIANTES / CÓDIGOS', M + 3, y + 5);
+  y += 7;
+
+  // Cabecera tabla variantes
+  const vcols = [32, 28, 22, 18, 22, 22];
+  const vheads = ['CÓDIGO', 'MOTOR', 'CILINDRADA', 'POTENCIA', 'TRACCIÓN', 'TRANS.'];
+  doc.setFillColor(...LGRAY);
+  doc.rect(M, y, CW, 6, 'F');
+  doc.setTextColor(...GRAY);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(7);
+  let cx = M + 2;
+  vheads.forEach((h, i) => { doc.text(h, cx, y + 4.2); cx += vcols[i]; });
+  y += 6;
+
+  v.variants.forEach((va, idx) => {
+    checkY(8);
+    if (idx % 2 === 0) { doc.setFillColor(248, 249, 251); doc.rect(M, y, CW, 7, 'F'); }
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7.5);
+    doc.setTextColor(...TEAL);
+    cx = M + 2;
+    doc.text(String(va.code), cx, y + 4.8); cx += vcols[0];
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...DARK);
+    [va.engine, va.displacement, `${va.power_kw} kW`, va.drive, va.trans].forEach((val, i) => {
+      doc.text(String(val), cx, y + 4.8);
+      cx += vcols[i + 1];
+    });
+    // línea divisora
+    doc.setDrawColor(220, 225, 230);
+    doc.line(M, y + 7, M + CW, y + 7);
+    y += 7;
+  });
+
+  y += 8;
+
+  // ── FLUIDOS ─────────────────────────────────────────────────────────────
+  doc.setFillColor(...TEAL);
+  doc.rect(M, y, CW, 7, 'F');
+  doc.setTextColor(...WHITE);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.text('FLUIDOS Y CAPACIDADES', M + 3, y + 5);
+  y += 10;
+
+  const FLUID_LABELS = {
+    engine_oil: 'Aceite Motor',
+    coolant: 'Refrigerante / Anticongelante',
+    automatic_transmission: 'Transmisión Automática (ATF)',
+    manual_transmission: 'Transmisión Manual',
+    cvt: 'CVT Fluid',
+    transfer: 'Transfer / Caja Transferencia',
+    front_differential: 'Diferencial Delantero',
+    rear_differential: 'Diferencial Trasero',
+    ac_refrigerant: 'Refrigerante A/C',
+    washer_tank: 'Depósito Limpiaparabrisas',
+    fuel_tank: 'Depósito de Combustible'
+  };
+
+  // Layout 2 columnas
+  const entries = Object.entries(v.fluids);
+  const col1 = entries.filter((_, i) => i % 2 === 0);
+  const col2 = entries.filter((_, i) => i % 2 !== 0);
+  const colW = (CW - 6) / 2;
+
+  const drawFluidCard = (key, rows, x, cardY) => {
+    const label = FLUID_LABELS[key] || key;
+    let h = 10 + rows.length * 12;
+
+    doc.setFillColor(245, 247, 250);
+    doc.roundedRect(x, cardY, colW, h, 2, 2, 'F');
+    doc.setDrawColor(220, 225, 230);
+    doc.roundedRect(x, cardY, colW, h, 2, 2, 'S');
+
+    // Acento lateral
+    doc.setFillColor(...TEAL);
+    doc.roundedRect(x, cardY, 3, h, 1, 1, 'F');
+
+    // Título
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7);
+    doc.setTextColor(...TEAL);
+    doc.text(label.toUpperCase(), x + 6, cardY + 6);
+
+    // Filas
+    rows.forEach((r, i) => {
+      const ry = cardY + 10 + i * 12;
+      const cap = r.capacity_l !== undefined ? `${r.capacity_l} L` : (r.capacity || '—');
+      const spec = r.spec || r.note || '';
+      const type = r.type || '';
+
+      if (i > 0) {
+        doc.setDrawColor(225, 228, 233);
+        doc.line(x + 4, ry - 1, x + colW - 4, ry - 1);
+      }
+
+      // Spec label
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.setTextColor(...GRAY);
+      if (spec) doc.text(doc.splitTextToSize(spec, colW - 45), x + 6, ry + 4);
+
+      // Capacidad
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.setTextColor(...TEAL);
+      doc.text(cap, x + colW - 4, ry + 4, { align: 'right' });
+
+      // Tipo fluido
+      if (type) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(6);
+        doc.setTextColor(130, 140, 150);
+        doc.text(doc.splitTextToSize(type, colW - 10), x + 6, ry + 9);
+      }
+    });
+
+    return h;
+  };
+
+  const maxPairs = Math.max(col1.length, col2.length);
+  for (let i = 0; i < maxPairs; i++) {
+    const e1 = col1[i], e2 = col2[i];
+    const h1 = e1 ? 10 + e1[1].length * 12 : 0;
+    const h2 = e2 ? 10 + e2[1].length * 12 : 0;
+    const rowH = Math.max(h1, h2);
+
+    checkY(rowH + 4);
+
+    if (e1) drawFluidCard(e1[0], e1[1], M, y);
+    if (e2) drawFluidCard(e2[0], e2[1], M + colW + 6, y);
+
+    y += rowH + 4;
+  }
+
+  // ── FOOTER ──────────────────────────────────────────────────────────────
+  const totalPages = doc.getNumberOfPages();
+  for (let p = 1; p <= totalPages; p++) {
+    doc.setPage(p);
+    doc.setFillColor(245, 247, 250);
+    doc.rect(0, 286, W, 11, 'F');
+    doc.setDrawColor(...TEAL);
+    doc.line(0, 286, W, 286);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(6.5);
+    doc.setTextColor(...GRAY);
+    doc.text('Fuente: Manual del propietario Toyota · toyota-club.net · Taller Torke', M, 291);
+    const fecha = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
+    doc.text(`Generado: ${fecha}  ·  Página ${p} de ${totalPages}`, W - M, 291, { align: 'right' });
+  }
+
+  const filename = `${v.brand}_${v.model}_${v.generation}_fluidos.pdf`.replace(/[\s/]+/g, '_');
+  doc.save(filename);
+  showToastCustom('✓ PDF descargado correctamente');
+}
+
+function render() {
+  const filtered = getFiltered();
+  const list = document.getElementById('vehiclesList');
+  document.getElementById('resultCount').textContent = `${filtered.length} de ${DB.length} vehículos`;
+  document.getElementById('tc-all').textContent = DB.length;
+  document.getElementById('tc-hev').textContent = DB.filter(isHEV).length;
+  document.getElementById('tc-diesel').textContent = DB.filter(isDiesel).length;
+  document.getElementById('tc-gas').textContent = DB.filter(v => !isHEV(v) && !isDiesel(v)).length;
+
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><h3>Sin resultados</h3><p>Intenta con otro término de búsqueda o ajusta los filtros.</p></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(v => renderCard(v)).join('');
+  openCards.forEach(id => {
+    const el = document.getElementById('card-' + id);
+    if (el) el.classList.add('open');
+  });
+}
+
+function renderCard(v) {
+  const tags = [];
+  if (isHEV(v)) tags.push('<span class="tag tag-hev">● HEV</span>');
+  if (isDiesel(v)) tags.push('<span class="tag tag-diesel">● DIESEL</span>');
+  if (!isHEV(v) && !isDiesel(v)) tags.push('<span class="tag tag-gas">● GASOLINA</span>');
+
+  const isSelected = selectedForCompare.has(v.id);
+  const checkboxHtml = compareMode ? `
+    <div class="card-checkbox ${isSelected ? 'checked' : ''}" onclick="toggleVehicleCompare('${v.id}', event)">
+      ${isSelected ? '✓' : ''}
+    </div>
+  ` : '';
+
+  return `<div class="vehicle-card ${isSelected ? 'open' : ''}" id="card-${v.id}" onclick="${compareMode ? '' : `toggleCard('${v.id}')`}">
+  <div class="card-header">
+    <div class="card-left">
+      ${checkboxHtml}
+      <span class="brand-badge ${getBrandClass(v.brand)}">${v.brand}</span>
+      <div class="card-info">
+        <div class="card-name">${v.model} <span style="color:var(--text-secondary);font-weight:400">${v.generation}</span></div>
+        <div class="card-meta">
+          <span><span class="dot"></span> ${v.years}</span>
+          <span>🌍 ${marketLabel[v.market] || v.market}</span>
+          ${tags.join('')}
+        </div>
+      </div>
+    </div>
+    <div class="card-right">
+      <span class="variants-pill">${v.variants.length} var.</span>
+      <span class="chevron">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="variants-section">
+      <div class="section-label">Variantes / Códigos</div>
+      <div class="variants-table-wrapper">
+        <table class="variants-table">
+          <thead><tr><th>Código</th><th>Motor</th><th>Cilindrada</th><th>kW</th><th>Tracción</th><th>Trans.</th></tr></thead>
+          <tbody>
+            ${v.variants.map(va => `<tr>
+              <td style="font-family:var(--font-mono);font-size:11px;color:var(--accent);font-weight:600">${va.code}</td>
+              <td><span class="engine-chip">${va.engine}</span></td>
+              <td>${va.displacement}</td>
+              <td>${va.power_kw} kW</td>
+              <td>${va.drive}</td>
+              <td>${va.trans}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="fluids-section">
+      ${renderFluids(v.fluids)}
+    </div>
+    <div class="card-actions">
+      <button class="pdf-btn" onclick="event.stopPropagation();generateVehiclePDF('${v.id}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="12" y1="18" x2="12" y2="12"></line>
+          <line x1="9" y1="15" x2="15" y2="15"></line>
+        </svg>
+        Descargar PDF
+      </button>
+    </div>
+    <div class="source-note">
+      <span>Fuente: Manual del propietario Toyota (traducción toyota-club.net)</span>
+      <span class="market-badge">${v.market.toUpperCase()}</span>
+    </div>
+  </div>
+</div>`;
+}
+
+function renderFluids(fluids) {
+  return Object.entries(fluids).map(([key, rows]) => {
+    const cfg = FLUID_CONFIG[key] || { label: key, icon: 'fi-other' };
+    const rowsHtml = rows.map((r, i) => {
+      const cap = r.capacity_l !== undefined ? r.capacity_l + ' L' : r.capacity || '';
+      const label = r.spec || r.note || '';
+      const type = r.type || '';
+      return `
+        ${i > 0 ? '<hr class="fluid-divider">' : ''}
+        <div class="fluid-row">
+          <div class="fluid-row-label">${label}</div>
+          <div class="fluid-row-right">
+            <div class="fluid-capacity">${cap}</div>
+            ${type ? `<div class="fluid-type">${type}</div>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+
+    return `<div class="fluid-card">
+      <div class="fluid-name"><span class="fluid-icon ${cfg.icon}"></span>${cfg.label}</div>
+      <div class="fluid-rows">${rowsHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCard(id) {
+  const el = document.getElementById('card-' + id);
+  if (!el) return;
+  el.classList.toggle('open');
+  if (el.classList.contains('open')) openCards.add(id);
+  else openCards.delete(id);
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+function showToastCustom(message) {
+  const t = document.getElementById('toast');
+  t.querySelector('div').textContent = message;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (compareMode) clearCompare();
+    else openCards.clear();
+    render();
+  }
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+  }
+});
+
+init();
+</script>
+</body>
+</html>

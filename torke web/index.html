@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Torke — Repuestos & Lubricantes · Asunción, Paraguay</title>
+<meta name="description" content="Tienda online de repuestos automotrices, lubricantes y filtros en Paraguay. Comprá por WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
+:root {
+  --bg:       #090C10;
+  --s1:       #0F1318;
+  --s2:       #161C24;
+  --s3:       #1D2530;
+  --teal:     #00D2BE;
+  --teal2:    #00A896;
+  --tealg:    rgba(0,210,190,.1);
+  --tealb:    rgba(0,210,190,.06);
+  --white:    #EDF0F4;
+  --silver:   #8A9BB0;
+  --silver2:  #546070;
+  --border:   #1E2830;
+  --border2:  #273040;
+  --red:      #E8303A;
+  --yellow:   #F5C518;
+  --green:    #22C55E;
+
+  --pad: clamp(16px,4vw,64px);
+  --radius: 10px;
+  --r-sm: 7px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--s1);}
+::-webkit-scrollbar-thumb{background:var(--teal2);border-radius:2px;}
+a{color:inherit;text-decoration:none;}
+button{cursor:pointer;font-family:inherit;}
+img{display:block;max-width:100%;object-fit:cover;}
+
+/* ═══════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════ */
+.mono{font-family:'Barlow Condensed',sans-serif;}
+.tag-label{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--teal);margin-bottom:14px;
+}
+.tag-label::before{content:'';width:18px;height:2px;background:var(--teal);}
+.section-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(28px,5vw,56px);
+  font-weight:900;line-height:.95;letter-spacing:-1px;text-transform:uppercase;
+}
+.section-title em{font-style:normal;color:var(--teal);}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:12px 24px;border-radius:var(--r-sm);border:none;transition:all .2s;
+}
+.btn-teal{background:var(--teal);color:var(--bg);}
+.btn-teal:hover{background:#00f0d8;box-shadow:0 0 24px rgba(0,210,190,.35);transform:translateY(-1px);}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border2);}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal);background:var(--tealb);}
+.btn-ghost{background:transparent;color:var(--silver);border:1px solid var(--border);}
+.btn-ghost:hover{color:var(--white);border-color:var(--border2);}
+
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease;}
+.fade-up.visible{opacity:1;transform:none;}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 var(--pad);
+  background:rgba(9,12,16,.88);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  transition:all .3s;
+}
+#nav.scrolled{box-shadow:0 4px 32px rgba(0,0,0,.6);}
+
+.nav-logo{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;
+  font-size:20px;letter-spacing:4px;text-transform:uppercase;
+  display:flex;align-items:center;gap:10px;
+}
+.nav-logo-pip{
+  width:7px;height:7px;border-radius:2px;
+  background:var(--teal);box-shadow:0 0 10px var(--teal);
+  animation:pip 2.5s ease-in-out infinite;
+}
+@keyframes pip{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+.nav-center{
+  display:flex;gap:4px;list-style:none;
+}
+@media(max-width:760px){.nav-center{display:none;}}
+
+.nav-center a{
+  font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--silver);padding:7px 13px;border-radius:6px;transition:all .2s;
+}
+.nav-center a:hover,.nav-center a.active{color:var(--white);background:var(--s2);}
+
+.nav-right{display:flex;align-items:center;gap:10px;}
+
+.cart-btn{
+  position:relative;
+  background:var(--s2);border:1px solid var(--border2);
+  width:38px;height:38px;border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;transition:all .2s;
+}
+.cart-btn:hover{border-color:var(--teal);}
+.cart-count{
+  position:absolute;top:-6px;right:-6px;
+  background:var(--teal);color:var(--bg);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:10px;font-weight:700;
+  width:18px;height:18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  display:none;
+}
+.cart-count.show{display:flex;}
+
+.hamburger{
+  display:none;flex-direction:column;gap:5px;
+  background:none;border:none;padding:6px;
+}
+@media(max-width:760px){.hamburger{display:flex;}}
+.hamburger span{width:20px;height:2px;background:var(--white);border-radius:2px;transition:all .3s;}
+
+.mobile-nav{
+  display:none;flex-direction:column;
+  position:fixed;top:60px;left:0;right:0;
+  background:rgba(9,12,16,.97);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border2);
+  padding:16px var(--pad);z-index:899;gap:2px;
+}
+.mobile-nav.open{display:flex;}
+.mobile-nav a{
+  color:var(--silver);font-size:14px;font-weight:500;
+  padding:11px 0;border-bottom:1px solid var(--border);transition:color .2s;
+}
+.mobile-nav a:last-child{border:none;}
+.mobile-nav a:hover{color:var(--teal);}
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+#inicio{
+  min-height:100vh;padding-top:60px;
+  display:grid;grid-template-columns:1fr 1fr;
+  position:relative;overflow:hidden;
+}
+@media(max-width:860px){#inicio{grid-template-columns:1fr;}}
+
+.hero-grid-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(0,210,190,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,210,190,.03) 1px,transparent 1px);
+  background-size:56px 56px;
+}
+.hero-glow{
+  position:absolute;top:30%;left:60%;width:700px;height:500px;
+  background:radial-gradient(ellipse,rgba(0,210,190,.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+.hero-left{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px var(--pad);
+}
+
+.hero-eyebrow{
+  display:flex;align-items:center;gap:10px;margin-bottom:20px;
+}
+.hero-eyebrow-line{width:32px;height:2px;background:var(--teal);}
+.hero-eyebrow span{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);
+}
+
+.hero-h1{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(54px,10vw,120px);
+  font-weight:900;line-height:.88;letter-spacing:-3px;text-transform:uppercase;
+  margin-bottom:24px;
+}
+.hero-h1 .accent{color:var(--teal);display:block;}
+.hero-h1 .ghost{
+  -webkit-text-stroke:2px rgba(237,240,244,.2);color:transparent;display:block;
+}
+
+.hero-desc{
+  font-size:clamp(14px,1.6vw,16px);color:var(--silver);
+  line-height:1.75;font-weight:300;max-width:400px;margin-bottom:36px;
+}
+
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:52px;}
+
+.hero-stats{display:flex;gap:28px;flex-wrap:wrap;}
+.hstat-num{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(28px,4vw,40px);font-weight:900;color:var(--white);line-height:1;
+}
+.hstat-num span{color:var(--teal);}
+.hstat-label{font-size:10px;color:var(--silver2);text-transform:uppercase;letter-spacing:1.5px;margin-top:3px;}
+
+/* Hero derecha — slideshow */
+.hero-right{
+  position:relative;overflow:hidden;
+  background:var(--s1);
+}
+@media(max-width:860px){.hero-right{display:none;}}
+
+.hero-slides{width:100%;height:100%;position:relative;}
+.hero-slide{
+  position:absolute;inset:0;
+  display:flex;align-items:flex-end;
+  padding:32px;
+  opacity:0;transition:opacity .8s ease;
+}
+.hero-slide.active{opacity:1;}
+
+/*
+ ╔══════════════════════════════════════════════════════╗
+ ║  INSTRUCCIÓN — IMAGEN HERO (portada)                 ║
+ ║                                                      ║
+ ║  Cada .hero-slide tiene background-image.            ║
+ ║  Para agregar tu foto:                               ║
+ ║  1. Poné la imagen en la carpeta /img/hero/          ║
+ ║     Nombre sugerido: hero-1.jpg, hero-2.jpg, etc.   ║
+ ║     Tamaño ideal: 900 × 700 px mínimo               ║
+ ║  2. Buscá las líneas con /* IMG-HERO-N */ y           ║
+ ║     reemplazá la URL del placeholder.                ║
+ ║  Ejemplo:                                            ║
+ ║  background-image: url('img/hero/hero-1.jpg');       ║
+ ╚══════════════════════════════════════════════════════╝
+*/
+.hero-slide-1{
+  /* IMG-HERO-1 — Foto portada principal (taller, autos, productos) */
+  background:linear-gradient(160deg,#0d1520 0%,#121c28 100%);
+  /* Cuando tengas la foto: background-image:url('img/hero/hero-1.jpg'); */
+  background-size:cover;background-position:center;
+}
+.hero-slide-2{
+  /* IMG-HERO-2 */
+  background:linear-gradient(160deg,#101820 0%,#0a1018 100%);
+  background-size:cover;background-position:center;
+}
+.hero-slide-3{
+  /* IMG-HERO-3 */
+  background:linear-gradient(160deg,#0c1a14 0%,#081010 100%);
+  background-size:cover;background-position:center;
+}
+
+.hero-slide-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(0deg,rgba(9,12,16,.85) 0%,rgba(9,12,16,.1) 60%);
+}
+
+/* Placeholder visual cuando no hay foto */
+.slide-placeholder{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:100px;font-weight:900;text-transform:uppercase;
+  color:var(--border2);letter-spacing:-8px;user-select:none;
+  pointer-events:none;
+}
+
+.hero-slide-info{position:relative;z-index:1;}
+.hero-slide-cat{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--teal);margin-bottom:6px;
+}
+.hero-slide-name{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(20px,3vw,28px);font-weight:700;text-transform:uppercase;
+  color:var(--white);margin-bottom:10px;
+}
+.hero-slide-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--teal);color:var(--bg);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:9px 18px;border-radius:6px;border:none;transition:all .2s;
+}
+.hero-slide-btn:hover{background:#00f0d8;}
+
+.hero-dots{
+  position:absolute;top:20px;right:20px;
+  display:flex;flex-direction:column;gap:6px;z-index:2;
+}
+.hero-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.2);border:none;transition:all .3s;
+}
+.hero-dot.active{background:var(--teal);box-shadow:0 0 8px var(--teal);}
+
+/* Ticker */
+.ticker{
+  background:var(--teal);overflow:hidden;height:34px;
+  display:flex;align-items:center;position:relative;z-index:10;
+}
+.ticker-track{display:inline-flex;animation:tick 28s linear infinite;}
+@keyframes tick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.ti{
+  font-family:'Barlow Condensed',sans-serif;font-size:12px;
+  font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--bg);padding:0 28px;white-space:nowrap;
+}
+.ti-sep{color:rgba(0,0,0,.3);padding:0 4px;font-size:16px;}
+
+/* ═══════════════════════════════════════════
+   TIENDA
+═══════════════════════════════════════════ */
+#tienda{padding:80px var(--pad);}
+
+/* Filtros de categoría */
+.cat-bar{
+  display:flex;gap:8px;flex-wrap:wrap;
+  margin-bottom:40px;
+}
+.cat-btn{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:8px 18px;border-radius:20px;border:1px solid var(--border2);
+  background:transparent;color:var(--silver);transition:all .2s;
+}
+.cat-btn:hover{border-color:var(--border2);color:var(--white);}
+.cat-btn.active{background:var(--teal);border-color:var(--teal);color:var(--bg);}
+
+/* Buscador */
+.shop-top{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:14px;margin-bottom:28px;
+}
+.shop-search{
+  position:relative;flex:1;max-width:320px;
+}
+.shop-search input{
+  width:100%;background:var(--s2);border:1px solid var(--border);
+  color:var(--white);padding:10px 10px 10px 38px;
+  border-radius:var(--r-sm);font-size:13px;font-family:'Barlow',sans-serif;
+  outline:none;transition:border-color .2s;
+}
+.shop-search input:focus{border-color:var(--teal);}
+.shop-search input::placeholder{color:var(--silver2);}
+.search-ico{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  color:var(--silver2);font-size:14px;pointer-events:none;
+}
+.shop-count{font-size:12px;color:var(--silver2);}
+
+/* Grid productos */
+.products-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:16px;
+}
+
+/* ─── PRODUCT CARD ─────────────────────── */
+.product-card{
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  position:relative;
+}
+.product-card:hover{
+  border-color:var(--border2);
+  transform:translateY(-3px);
+  box-shadow:0 16px 48px rgba(0,0,0,.45);
+}
+
+.product-badge{
+  position:absolute;top:10px;left:10px;z-index:2;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:3px 8px;border-radius:4px;
+}
+.badge-new{background:var(--teal);color:var(--bg);}
+.badge-sale{background:var(--red);color:#fff;}
+.badge-hot{background:var(--yellow);color:var(--bg);}
+
+/*
+ ╔═══════════════════════════════════════════════════════╗
+ ║  INSTRUCCIÓN — IMAGEN DE PRODUCTO                     ║
+ ║                                                       ║
+ ║  Cada producto tiene un .product-img-wrap.            ║
+ ║  Para agregar la imagen de un producto:               ║
+ ║                                                       ║
+ ║  OPCIÓN A — background-image (recomendado):           ║
+ ║  1. Guardá la imagen en /img/productos/               ║
+ ║     Nombre sugerido: castrol-5w30.jpg                 ║
+ ║     Tamaño ideal: 600 × 600 px (cuadrada)            ║
+ ║  2. En el objeto del producto (en el JS de abajo)     ║
+ ║     completá el campo "img":                          ║
+ ║     img: 'img/productos/castrol-5w30.jpg'             ║
+ ║                                                       ║
+ ║  OPCIÓN B — <img> tag:                                ║
+ ║  Podés poner una URL externa (ej. de tu Drive o CDN): ║
+ ║  img: 'https://mi-cdn.com/fotos/castrol.webp'         ║
+ ║                                                       ║
+ ║  Si no hay imagen, se muestra el emoji del producto.  ║
+ ╚═══════════════════════════════════════════════════════╝
+*/
+.product-img-wrap{
+  aspect-ratio:1/1;background:var(--s2);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.product-img-wrap img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .4s ease;
+}
+.product-card:hover .product-img-wrap img{transform:scale(1.05);}
+.product-img-placeholder{
+  font-size:52px;opacity:.35;
+  transition:opacity .3s;
+}
+.product-card:hover .product-img-placeholder{opacity:.5;}
+
+.product-body{padding:16px;flex:1;display:flex;flex-direction:column;}
+.product-cat{
+  font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--teal);margin-bottom:6px;
+}
+.product-name{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:17px;font-weight:700;text-transform:uppercase;
+  color:var(--white);line-height:1.15;margin-bottom:6px;
+}
+.product-desc{
+  font-size:12px;color:var(--silver);line-height:1.5;
+  font-weight:300;flex:1;margin-bottom:14px;
+}
+.product-footer{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin-top:auto;
+}
+.product-price{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:22px;font-weight:900;color:var(--teal);
+}
+.product-price-old{
+  font-size:13px;color:var(--silver2);text-decoration:line-through;margin-left:4px;
+}
+.add-cart-btn{
+  width:36px;height:36px;border-radius:7px;border:none;
+  background:var(--teal);color:var(--bg);
+  font-size:18px;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;flex-shrink:0;
+}
+.add-cart-btn:hover{background:#00f0d8;transform:scale(1.1);}
+
+/* No results */
+.no-results{
+  grid-column:1/-1;text-align:center;
+  padding:80px 20px;color:var(--silver2);
+}
+.no-results .icon{font-size:48px;opacity:.2;margin-bottom:16px;}
+.no-results p{font-size:14px;}
+
+/* ═══════════════════════════════════════════
+   CARRITO (sidebar)
+═══════════════════════════════════════════ */
+.cart-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);
+  z-index:1100;opacity:0;pointer-events:none;transition:opacity .3s;
+  backdrop-filter:blur(4px);
+}
+.cart-overlay.open{opacity:1;pointer-events:all;}
+
+.cart-sidebar{
+  position:fixed;top:0;right:-420px;width:420px;max-width:100vw;height:100vh;
+  background:var(--s1);border-left:1px solid var(--border2);
+  z-index:1101;transition:right .35s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+}
+.cart-sidebar.open{right:0;}
+
+.cart-head{
+  padding:20px 24px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.cart-head-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:20px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+}
+.cart-close{
+  background:var(--s2);border:1px solid var(--border);
+  width:32px;height:32px;border-radius:6px;
+  font-size:16px;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;color:var(--silver);
+}
+.cart-close:hover{border-color:var(--red);color:var(--red);}
+
+.cart-items{flex:1;overflow-y:auto;padding:16px 24px;display:flex;flex-direction:column;gap:12px;}
+
+.cart-empty{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:12px;
+  color:var(--silver2);font-size:13px;text-align:center;
+}
+.cart-empty-icon{font-size:48px;opacity:.2;}
+
+.cart-item{
+  display:flex;gap:14px;align-items:center;
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:12px;
+}
+.cart-item-img{
+  width:56px;height:56px;border-radius:6px;
+  background:var(--s3);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:24px;
+  overflow:hidden;
+}
+.cart-item-img img{width:100%;height:100%;object-fit:cover;}
+.cart-item-info{flex:1;min-width:0;}
+.cart-item-name{
+  font-size:13px;font-weight:600;color:var(--white);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px;
+}
+.cart-item-price{font-size:12px;color:var(--teal);font-weight:700;}
+.cart-item-controls{display:flex;align-items:center;gap:6px;margin-top:6px;}
+.qty-btn{
+  width:24px;height:24px;border-radius:5px;border:1px solid var(--border2);
+  background:var(--s3);color:var(--white);font-size:14px;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+.qty-btn:hover{border-color:var(--teal);color:var(--teal);}
+.qty-num{font-size:13px;font-weight:600;min-width:20px;text-align:center;}
+.cart-item-del{
+  background:none;border:none;color:var(--silver2);
+  font-size:16px;padding:4px;transition:color .2s;
+}
+.cart-item-del:hover{color:var(--red);}
+
+.cart-foot{
+  padding:20px 24px;border-top:1px solid var(--border);
+  display:flex;flex-direction:column;gap:12px;
+}
+.cart-total{
+  display:flex;justify-content:space-between;align-items:center;
+}
+.cart-total-label{font-size:13px;color:var(--silver);}
+.cart-total-val{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:26px;font-weight:900;color:var(--teal);
+}
+.cart-note{font-size:11px;color:var(--silver2);text-align:center;}
+
+.wa-order-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  background:#25D366;color:#fff;border:none;border-radius:var(--r-sm);
+  padding:14px 24px;width:100%;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:16px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  transition:all .2s;
+}
+.wa-order-btn:hover{background:#1db954;box-shadow:0 0 24px rgba(37,211,102,.35);}
+.wa-order-btn .icon{font-size:22px;}
+
+/* ═══════════════════════════════════════════
+   RECURSOS
+═══════════════════════════════════════════ */
+#recursos{
+  padding:80px var(--pad);
+  background:var(--s1);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.recursos-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:16px;margin-top:40px;
+}
+.recurso-card{
+  background:var(--s2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px;display:flex;flex-direction:column;gap:14px;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.recurso-card::before{
+  content:'';position:absolute;bottom:0;left:0;
+  width:0;height:3px;background:var(--teal);transition:width .4s;
+}
+.recurso-card:hover{border-color:var(--border2);transform:translateY(-3px);}
+.recurso-card:hover::before{width:100%;}
+.recurso-icon{font-size:36px;}
+.recurso-name{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:20px;font-weight:700;text-transform:uppercase;color:var(--white);
+}
+.recurso-desc{font-size:13px;color:var(--silver);line-height:1.6;font-weight:300;}
+.recurso-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--teal);margin-top:auto;transition:gap .2s;
+}
+.recurso-card:hover .recurso-link{gap:10px;}
+
+/* ═══════════════════════════════════════════
+   NOTICIAS
+═══════════════════════════════════════════ */
+#noticias{padding:80px var(--pad);}
+.news-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:20px;margin-top:40px;
+}
+.news-card{
+  background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:all .3s;
+}
+.news-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,.4);}
+
+.news-thumb{
+  aspect-ratio:16/9;background:var(--s2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:48px;position:relative;overflow:hidden;
+}
+/*
+ ╔═══════════════════════════════════════════════════════╗
+ ║  INSTRUCCIÓN — IMAGEN NOTICIA / MINIATURA             ║
+ ║                                                       ║
+ ║  Cada noticia tiene un .news-thumb.                   ║
+ ║  Para agregar la miniatura:                           ║
+ ║  1. Guardá la imagen en /img/noticias/                ║
+ ║     Tamaño ideal: 800 × 450 px (16:9)                ║
+ ║  2. En el objeto de la noticia en el JS,              ║
+ ║     completá el campo "img":                          ║
+ ║     img: 'img/noticias/aceite-diesel.jpg'             ║
+ ╚═══════════════════════════════════════════════════════╝
+*/
+.news-thumb img{
+  width:100%;height:100%;object-fit:cover;
+  position:absolute;inset:0;transition:transform .4s;
+}
+.news-card:hover .news-thumb img{transform:scale(1.05);}
+.news-thumb-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(0deg,rgba(9,12,16,.6) 0%,transparent 60%);
+}
+.news-cat{
+  position:absolute;bottom:12px;left:12px;z-index:1;
+  background:var(--teal);color:var(--bg);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:3px 10px;border-radius:4px;
+}
+
+.news-body{padding:20px;flex:1;display:flex;flex-direction:column;}
+.news-date{font-size:10px;color:var(--silver2);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.news-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:18px;font-weight:700;text-transform:uppercase;
+  color:var(--white);line-height:1.2;margin-bottom:8px;
+  transition:color .2s;
+}
+.news-card:hover .news-title{color:var(--teal);}
+.news-excerpt{font-size:12px;color:var(--silver);line-height:1.6;font-weight:300;flex:1;}
+.news-footer{
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.news-read{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);}
+.news-time{font-size:11px;color:var(--silver2);}
+
+/* ═══════════════════════════════════════════
+   NOSOTROS
+═══════════════════════════════════════════ */
+#nosotros{
+  padding:80px var(--pad);
+  background:var(--s1);
+  border-top:1px solid var(--border);
+}
+.nosotros-wrap{
+  display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;
+  max-width:1100px;margin:0 auto;
+}
+@media(max-width:860px){.nosotros-wrap{grid-template-columns:1fr;gap:48px;}}
+
+.nosotros-visual{position:relative;}
+/*
+ ╔═══════════════════════════════════════════════════════╗
+ ║  INSTRUCCIÓN — FOTO DEL TALLER (sección Nosotros)    ║
+ ║                                                       ║
+ ║  Buscá .nosotros-photo en el HTML.                   ║
+ ║  Para agregar la foto del taller:                     ║
+ ║  1. Guardá la imagen en /img/                        ║
+ ║     Nombre: taller.jpg                               ║
+ ║     Tamaño ideal: 800 × 600 px                       ║
+ ║  2. Reemplazá el emoji 🔧 por:                        ║
+ ║     <img src="img/taller.jpg" alt="Taller Torke"     ║
+ ║          style="width:100%;height:100%;               ║
+ ║          object-fit:cover;border-radius:14px;">       ║
+ ╚═══════════════════════════════════════════════════════╝
+*/
+.nosotros-photo{
+  width:100%;aspect-ratio:4/3;
+  background:var(--s2);border:1px solid var(--border2);border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:80px;overflow:hidden;
+  /* Cuando tengas foto: background:none; */
+}
+.nosotros-years{
+  position:absolute;bottom:-16px;right:-16px;
+  width:96px;height:96px;border-radius:50%;
+  background:var(--teal);color:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;
+  box-shadow:0 0 36px rgba(0,210,190,.3);
+}
+.nosotros-years span:first-child{font-size:32px;line-height:1;}
+.nosotros-years span:last-child{font-size:9px;letter-spacing:1px;text-transform:uppercase;}
+
+.nosotros-text p{font-size:15px;color:var(--silver);line-height:1.8;font-weight:300;margin-bottom:16px;}
+.features{display:flex;flex-direction:column;gap:14px;margin:28px 0;}
+.feature{display:flex;gap:14px;align-items:flex-start;}
+.feature-ico{
+  width:36px;height:36px;flex-shrink:0;border-radius:8px;
+  background:var(--tealg);border:1px solid rgba(0,210,190,.15);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.feature-text strong{display:block;font-size:14px;font-weight:600;color:var(--white);margin-bottom:2px;}
+.feature-text span{font-size:12px;color:var(--silver2);}
+
+/* ═══════════════════════════════════════════
+   CONTACTO / FOOTER
+═══════════════════════════════════════════ */
+#contacto{
+  padding:64px var(--pad);
+  background:var(--bg);
+  border-top:1px solid var(--border);
+}
+.contacto-grid{
+  display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;
+  margin-bottom:48px;
+}
+@media(max-width:860px){.contacto-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.contacto-grid{grid-template-columns:1fr;}}
+
+.footer-brand .logo{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;
+  font-size:24px;letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.footer-brand .logo span{color:var(--teal);}
+.footer-brand p{font-size:13px;color:var(--silver2);line-height:1.6;max-width:260px;font-weight:300;}
+
+.footer-col-title{
+  font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--silver2);margin-bottom:14px;
+}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.footer-links a{font-size:13px;color:var(--silver);transition:color .2s;}
+.footer-links a:hover{color:var(--teal);}
+
+.footer-bottom{
+  border-top:1px solid var(--border);padding-top:24px;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;
+}
+.footer-copy{font-size:11px;color:var(--silver2);}
+.footer-copy a{color:var(--teal);}
+.socials{display:flex;gap:8px;}
+.social{
+  width:32px;height:32px;border-radius:7px;
+  background:var(--s1);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--silver);transition:all .2s;
+}
+.social:hover{border-color:var(--teal);color:var(--teal);}
+
+/* WA FAB */
+.wa-fab{
+  position:fixed;bottom:24px;right:24px;
+  width:54px;height:54px;border-radius:50%;
+  background:#25D366;display:flex;align-items:center;justify-content:center;
+  font-size:26px;z-index:800;
+  box-shadow:0 4px 20px rgba(37,211,102,.4);
+  animation:wfab 3s ease-in-out infinite;transition:transform .2s;
+}
+.wa-fab:hover{transform:scale(1.12);}
+@keyframes wfab{
+  0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.4);}
+  50%{box-shadow:0 4px 28px rgba(37,211,102,.6),0 0 0 8px rgba(37,211,102,.08);}
+}
+
+/* ═══════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════ */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--s2);border:1px solid var(--teal);
+  color:var(--white);padding:12px 20px;border-radius:var(--r-sm);
+  font-size:13px;font-weight:500;z-index:2000;
+  opacity:0;transition:all .3s;pointer-events:none;
+  white-space:nowrap;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══════════════════════════════════════════ -->
+<nav id="nav">
+  <a href="#inicio" class="nav-logo">
+    <span class="nav-logo-pip"></span>Torke
+  </a>
+  <ul class="nav-center">
+    <li><a href="#tienda" class="active">Tienda</a></li>
+    <li><a href="#recursos">Recursos</a></li>
+    <li><a href="#noticias">Noticias</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="cart-btn" onclick="openCart()" title="Carrito">
+      🛒
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <button class="hamburger" onclick="toggleMobileNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="#tienda" onclick="closeMobileNav()">Tienda</a>
+  <a href="#recursos" onclick="closeMobileNav()">Recursos</a>
+  <a href="#noticias" onclick="closeMobileNav()">Noticias</a>
+  <a href="#nosotros" onclick="closeMobileNav()">Nosotros</a>
+  <a href="#contacto" onclick="closeMobileNav()">Contacto</a>
+</div>
+
+<!-- ═══ HERO ═══════════════════════════════════════════ -->
+<section id="inicio">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span>Asunción · Paraguay</span>
+    </div>
+
+    <h1 class="hero-h1">
+      <span>Auto</span>
+      <span class="accent">Torke</span>
+      <span class="ghost">Shop</span>
+    </h1>
+
+    <p class="hero-desc">
+      Repuestos, lubricantes y filtros para tu vehículo. Comprá online, consultá por WhatsApp y retirá en el taller.
+    </p>
+
+    <div class="hero-actions">
+      <button class="btn btn-teal" onclick="document.getElementById('tienda').scrollIntoView({behavior:'smooth'})">
+        Ver tienda →
+      </button>
+      <a href="#recursos" class="btn btn-outline">FluidDB 📊</a>
+    </div>
+
+    <div class="hero-stats">
+      <div>
+        <div class="hstat-num">500<span>+</span></div>
+        <div class="hstat-label">Productos</div>
+      </div>
+      <div>
+        <div class="hstat-num">600<span>+</span></div>
+        <div class="hstat-label">Modelos FluidDB</div>
+      </div>
+      <div>
+        <div class="hstat-num">10<span>+</span></div>
+        <div class="hstat-label">Años de experiencia</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slideshow portada -->
+  <div class="hero-right">
+    <div class="hero-slides" id="heroSlides">
+
+      <!-- SLIDE 1 — Reemplazá el fondo con tu foto en .hero-slide-1 en el CSS -->
+      <div class="hero-slide hero-slide-1 active">
+        <div class="hero-slide-overlay"></div>
+        <div class="slide-placeholder">🛢️</div>
+        <div class="hero-slide-info">
+          <div class="hero-slide-cat">Destacado</div>
+          <div class="hero-slide-name">Lubricantes Premium</div>
+          <button class="hero-slide-btn" onclick="filterCat('lubricantes')">Ver productos →</button>
+        </div>
+      </div>
+
+      <!-- SLIDE 2 -->
+      <div class="hero-slide hero-slide-2">
+        <div class="hero-slide-overlay"></div>
+        <div class="slide-placeholder">🔧</div>
+        <div class="hero-slide-info">
+          <div class="hero-slide-cat">Más vendidos</div>
+          <div class="hero-slide-name">Filtros Originales</div>
+          <button class="hero-slide-btn" onclick="filterCat('filtros')">Ver productos →</button>
+        </div>
+      </div>
+
+      <!-- SLIDE 3 -->
+      <div class="hero-slide hero-slide-3">
+        <div class="hero-slide-overlay"></div>
+        <div class="slide-placeholder">⚙️</div>
+        <div class="hero-slide-info">
+          <div class="hero-slide-cat">Nuevo</div>
+          <div class="hero-slide-name">Repuestos Toyota</div>
+          <button class="hero-slide-btn" onclick="filterCat('repuestos')">Ver productos →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-dots" id="heroDots">
+      <button class="hero-dot active" onclick="goSlide(0)"></button>
+      <button class="hero-dot" onclick="goSlide(1)"></button>
+      <button class="hero-dot" onclick="goSlide(2)"></button>
+    </div>
+  </div>
+</section>
+
+<!-- Ticker -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ti">Lubricantes</span><span class="ti-sep">·</span>
+    <span class="ti">Filtros Originales</span><span class="ti-sep">·</span>
+    <span class="ti">Repuestos Toyota</span><span class="ti-sep">·</span>
+    <span class="ti">Mecánica Diesel</span><span class="ti-sep">·</span>
+    <span class="ti">FluidDB</span><span class="ti-sep">·</span>
+    <span class="ti">Compra por WhatsApp</span><span class="ti-sep">·</span>
+    <span class="ti">Asunción · PY</span><span class="ti-sep">·</span>
+    <span class="ti">Lubricantes</span><span class="ti-sep">·</span>
+    <span class="ti">Filtros Originales</span><span class="ti-sep">·</span>
+    <span class="ti">Repuestos Toyota</span><span class="ti-sep">·</span>
+    <span class="ti">Mecánica Diesel</span><span class="ti-sep">·</span>
+    <span class="ti">FluidDB</span><span class="ti-sep">·</span>
+    <span class="ti">Compra por WhatsApp</span><span class="ti-sep">·</span>
+    <span class="ti">Asunción · PY</span><span class="ti-sep">·</span>
+  </div>
+</div>
+
+<!-- ═══ TIENDA ══════════════════════════════════════════ -->
+<section id="tienda">
+  <div class="section-header fade-up" style="margin-bottom:32px">
+    <div class="tag-label">Productos</div>
+    <h2 class="section-title">Nuestra <em>Tienda</em></h2>
+  </div>
+
+  <div class="cat-bar" id="catBar">
+    <button class="cat-btn active" onclick="filterCat('todos')">Todos</button>
+    <button class="cat-btn" onclick="filterCat('lubricantes')">🛢️ Lubricantes</button>
+    <button class="cat-btn" onclick="filterCat('filtros')">🔄 Filtros</button>
+    <button class="cat-btn" onclick="filterCat('repuestos')">⚙️ Repuestos</button>
+    <button class="cat-btn" onclick="filterCat('frenos')">🔴 Frenos</button>
+    <button class="cat-btn" onclick="filterCat('electrico')">⚡ Eléctrico</button>
+    <button class="cat-btn" onclick="filterCat('accesorios')">🧰 Accesorios</button>
+  </div>
+
+  <div class="shop-top">
+    <div class="shop-search">
+      <span class="search-ico">🔍</span>
+      <input type="text" id="searchInput" placeholder="Buscar producto..." oninput="renderProducts()">
+    </div>
+    <div class="shop-count" id="shopCount"></div>
+  </div>
+
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- ═══ RECURSOS ════════════════════════════════════════ -->
+<section id="recursos">
+  <div class="section-header fade-up" style="margin-bottom:0">
+    <div class="tag-label">Herramientas gratis</div>
+    <h2 class="section-title">Recursos <em>Técnicos</em></h2>
+  </div>
+  <div class="recursos-grid">
+    <div class="recurso-card fade-up">
+      <div class="recurso-icon">📊</div>
+      <div class="recurso-name">FluidDB — Fluidos & Capacidades</div>
+      <p class="recurso-desc">Consultá los fluidos exactos para tu vehículo: aceite motor, refrigerante, ATF, CVT, diferencial. +600 modelos Toyota, Lexus, Daihatsu y más. Descargá el PDF gratis.</p>
+      <a href="fluidos.html" class="recurso-link">Abrir FluidDB →</a>
+    </div>
+    <div class="recurso-card fade-up">
+      <div class="recurso-icon">🔧</div>
+      <div class="recurso-name">Guía de Mantenimiento</div>
+      <p class="recurso-desc">Intervalos recomendados de servicio para los modelos más comunes del mercado paraguayo. Filtros, aceites, bujías y más.</p>
+      <a href="#noticias" class="recurso-link">Ver guías →</a>
+    </div>
+    <div class="recurso-card fade-up">
+      <div class="recurso-icon">💬</div>
+      <div class="recurso-name">Consultá al Mecánico</div>
+      <p class="recurso-desc">¿Tenés una duda técnica? Escribinos por WhatsApp y nuestros mecánicos te responden. Sin costo, sin compromiso.</p>
+      <a href="https://wa.me/595981000000?text=Hola+Torke!+Tengo+una+consulta+técnica." target="_blank" class="recurso-link">Consultar gratis →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NOTICIAS ════════════════════════════════════════ -->
+<section id="noticias">
+  <div class="section-header fade-up" style="margin-bottom:0">
+    <div class="tag-label">Blog técnico</div>
+    <h2 class="section-title">Últimas <em>Noticias</em></h2>
+  </div>
+  <div class="news-grid" id="newsGrid"></div>
+</section>
+
+<!-- ═══ NOSOTROS ════════════════════════════════════════ -->
+<section id="nosotros">
+  <div class="nosotros-wrap">
+    <div class="nosotros-visual fade-up">
+      <div class="nosotros-photo">🔧</div>
+      <div class="nosotros-years">
+        <span>10</span><span>años</span>
+      </div>
+    </div>
+    <div class="nosotros-text fade-up">
+      <div class="tag-label">Quiénes somos</div>
+      <h2 class="section-title" style="margin-bottom:20px">Sobre <em>Torke</em></h2>
+      <p>Taller Torke nació en Asunción con una misión clara: mecánica de calidad con honestidad. Combinamos experiencia técnica con herramientas digitales modernas para dar al cliente la mejor experiencia.</p>
+      <p>Hoy somos referentes en mecánica diesel y general, con stock propio de lubricantes y repuestos, y nuestra plataforma FluidDB — base de datos técnica gratuita para todo Paraguay.</p>
+      <div class="features">
+        <div class="feature">
+          <div class="feature-ico">🏆</div>
+          <div class="feature-text">
+            <strong>Técnicos certificados</strong>
+            <span>Formación continua en mecánica moderna y diagnóstico electrónico</span>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-ico">🛒</div>
+          <div class="feature-text">
+            <strong>Compra segura por WhatsApp</strong>
+            <span>Armá tu carrito y cerrás el pedido directo con nosotros</span>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-ico">📊</div>
+          <div class="feature-text">
+            <strong>FluidDB gratuito</strong>
+            <span>Herramienta técnica abierta para mecánicos y dueños de vehículos</span>
+          </div>
+        </div>
+      </div>
+      <a href="https://wa.me/595981000000" target="_blank" class="btn btn-teal">
+        💬 Contactar por WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACTO / FOOTER ═══════════════════════════════ -->
+<footer id="contacto">
+  <div class="contacto-grid">
+    <div class="footer-brand">
+      <div class="logo">Taller <span>Torke</span></div>
+      <p>Mecánica general y diesel, lubricantes, filtros y repuestos en Asunción, Paraguay. Compra online con entrega por WhatsApp.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Tienda</div>
+      <ul class="footer-links">
+        <li><a href="#tienda" onclick="filterCat('lubricantes')">Lubricantes</a></li>
+        <li><a href="#tienda" onclick="filterCat('filtros')">Filtros</a></li>
+        <li><a href="#tienda" onclick="filterCat('repuestos')">Repuestos</a></li>
+        <li><a href="#tienda" onclick="filterCat('frenos')">Frenos</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Recursos</div>
+      <ul class="footer-links">
+        <li><a href="fluidos.html">FluidDB</a></li>
+        <li><a href="#noticias">Blog técnico</a></li>
+        <li><a href="https://wa.me/595981000000">Consulta gratis</a></li>
+        <li><a href="#nosotros">Sobre nosotros</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 <a href="#">Taller Torke</a> · Asunción, Paraguay</div>
+    <div class="socials">
+      <a href="#" class="social">f</a>
+      <a href="#" class="social">ig</a>
+      <a href="#" class="social">tt</a>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/595981000000" target="_blank" class="wa-fab" title="WhatsApp">💬</a>
+
+<!-- ═══ CARRITO SIDEBAR ════════════════════════════════ -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-head">
+    <div class="cart-head-title">🛒 Mi Carrito</div>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-foot" id="cartFoot" style="display:none">
+    <div class="cart-total">
+      <span class="cart-total-label">Total estimado</span>
+      <span class="cart-total-val" id="cartTotal">₲ 0</span>
+    </div>
+    <div class="cart-note">Los precios son en guaraníes. El precio final se confirma por WhatsApp.</div>
+    <button class="wa-order-btn" onclick="orderWhatsApp()">
+      <span class="icon">💬</span> Finalizar pedido por WhatsApp
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ═══ SCRIPT ══════════════════════════════════════════ -->
+<script>
+/* ════════════════════════════════════════════════════════
+   BASE DE DATOS DE PRODUCTOS
+   
+   Para agregar productos:
+   1. Copiá un objeto del array y editá sus campos.
+   2. El campo "img" acepta:
+      - Ruta local:   'img/productos/mi-producto.jpg'
+      - URL externa:  'https://url-de-tu-imagen.com/foto.jpg'
+   3. Si "img" está vacío (''), se muestra el emoji.
+   4. Las categorías disponibles son:
+      lubricantes | filtros | repuestos | frenos | electrico | accesorios
+
+   PRECIOS: en guaraníes (sin puntos ni comas).
+   badge: 'new' | 'sale' | 'hot' | '' (sin badge)
+════════════════════════════════════════════════════════ */
+const PRODUCTS = [
+  {
+    id: 1,
+    name: 'Castrol GTX 10W-40 4L',
+    cat: 'lubricantes',
+    desc: 'Aceite mineral para motores gasolina y diesel. API SL/CF. Protección confiable para uso diario.',
+    price: 120000,
+    oldPrice: null,
+    emoji: '🛢️',
+    img: 'C:\Users\usuario\Desktop\torke web\img\productos',  /* ← Ponés aquí la ruta de tu imagen */
+    badge: 'hot',
+  },
+  {
+    id: 2,
+    name: 'Mobil Super 5W-30 4L',
+    cat: 'lubricantes',
+    desc: 'Aceite sintético avanzado. Excelente para motores modernos con larga vida útil.',
+    price: 195000,
+    oldPrice: 220000,
+    emoji: '🛢️',
+    img: '',
+    badge: 'sale',
+  },
+  {
+    id: 3,
+    name: 'Shell Helix Ultra 0W-20',
+    cat: 'lubricantes',
+    desc: 'Aceite 100% sintético para motores Toyota modernos. ILSAC GF-6.',
+    price: 260000,
+    oldPrice: null,
+    emoji: '🛢️',
+    img: '',
+    badge: 'new',
+  },
+  {
+    id: 4,
+    name: 'Filtro de Aceite Toyota OEM',
+    cat: 'filtros',
+    desc: 'Filtro original Toyota para Corolla, Camry, RAV4, Hilux y más. Alta retención de partículas.',
+    price: 38000,
+    oldPrice: null,
+    emoji: '🔄',
+    img: '',
+    badge: '',
+  },
+  {
+    id: 5,
+    name: 'Filtro de Aire Denso',
+    cat: 'filtros',
+    desc: 'Filtro de aire de alto rendimiento. Compatibilidad amplia con modelos Toyota/Lexus.',
+    price: 55000,
+    oldPrice: 65000,
+    emoji: '💨',
+    img: '',
+    badge: 'sale',
+  },
+  {
+    id: 6,
+    name: 'Filtro de Combustible Universal',
+    cat: 'filtros',
+    desc: 'Filtro de combustible para diesel y gasolina. Protege la bomba e inyectores.',
+    price: 42000,
+    oldPrice: null,
+    emoji: '⛽',
+    img: '',
+    badge: '',
+  },
+  {
+    id: 7,
+    name: 'Pastillas de Freno Delanteras',
+    cat: 'frenos',
+    desc: 'Pastillas de freno de alto rendimiento. Bajo polvo, baja temperatura de trabajo.',
+    price: 145000,
+    oldPrice: null,
+    emoji: '🔴',
+    img: '',
+    badge: '',
+  },
+  {
+    id: 8,
+    name: 'Líquido de Frenos DOT-4',
+    cat: 'frenos',
+    desc: 'Líquido de frenos sintético DOT-4. Alto punto de ebullición para uso severo.',
+    price: 35000,
+    oldPrice: null,
+    emoji: '🔵',
+    img: '',
+    badge: 'new',
+  },
+  {
+    id: 9,
+    name: 'Batería 12V 60Ah',
+    cat: 'electrico',
+    desc: 'Batería libre de mantenimiento. Tecnología AGM. Garantía 12 meses.',
+    price: 580000,
+    oldPrice: 650000,
+    emoji: '🔋',
+    img: '',
+    badge: 'sale',
+  },
+  {
+    id: 10,
+    name: 'Bujías NGK (juego x4)',
+    cat: 'electrico',
+    desc: 'Bujías originales NGK de iridio. Mayor duración y mejor combustión.',
+    price: 95000,
+    oldPrice: null,
+    emoji: '⚡',
+    img: '',
+    badge: '',
+  },
+  {
+    id: 11,
+    name: 'Correa de Distribución Toyota',
+    cat: 'repuestos',
+    desc: 'Correa de distribución original para motores Toyota 3ZR, 2ZR, 1NZ. Incluye tensor.',
+    price: 185000,
+    oldPrice: null,
+    emoji: '⚙️',
+    img: '',
+    badge: 'hot',
+  },
+  {
+    id: 12,
+    name: 'Refrigerante Toyota SLLC 4L',
+    cat: 'repuestos',
+    desc: 'Refrigerante original Toyota Super Long Life Coolant. Rosa. Para todos los modelos.',
+    price: 110000,
+    oldPrice: null,
+    emoji: '🧊',
+    img: '',
+    badge: '',
+  },
+  {
+    id: 13,
+    name: 'ATF WS Toyota 1L',
+    cat: 'repuestos',
+    desc: 'Fluido para transmisión automática Toyota WS. Para cajas de 6AT y superiores.',
+    price: 72000,
+    oldPrice: null,
+    emoji: '🔩',
+    img: '',
+    badge: '',
+  },
+  {
+    id: 14,
+    name: 'Kit Limpieza Interior Auto',
+    cat: 'accesorios',
+    desc: 'Set completo: limpiador de tablero, ambientador, paños de microfibra y más.',
+    price: 65000,
+    oldPrice: null,
+    emoji: '🧹',
+    img: '',
+    badge: 'new',
+  },
+];
+
+/* ════════════════════════════════════════════════════════
+   BASE DE DATOS DE NOTICIAS
+   
+   Para agregar noticias:
+   1. Copiá un objeto y editá los campos.
+   2. El campo "img" acepta ruta local o URL.
+      Si está vacío, se muestra el emoji.
+════════════════════════════════════════════════════════ */
+const NEWS = [
+  {
+    id: 1,
+    title: '¿Cada cuántos km cambiar el aceite en motores diesel?',
+    excerpt: 'La respuesta varía según tipo de aceite y uso. Te explicamos cómo calcularlo para extender la vida de tu motor diesel.',
+    cat: 'Mantenimiento',
+    date: 'Mayo 2025',
+    time: '5 min',
+    emoji: '🛢️',
+    img: '',  /* ← Miniatura de la noticia */
+    link: '#',
+  },
+  {
+    id: 2,
+    title: 'Señales de que tus inyectores diesel necesitan limpieza',
+    excerpt: 'Humo negro, consumo elevado, falta de potencia. Conocé los síntomas antes de que el problema se vuelva costoso.',
+    cat: 'Diesel',
+    date: 'Abril 2025',
+    time: '4 min',
+    emoji: '⚙️',
+    img: '',
+    link: '#',
+  },
+  {
+    id: 3,
+    title: 'ATF WS vs T-IV: cuál usar en tu Toyota automático',
+    excerpt: 'Confundir estos fluidos puede dañar tu caja de cambios. Te explicamos la diferencia y cómo verificar cuál necesita tu vehículo.',
+    cat: 'FluidDB',
+    date: 'Marzo 2025',
+    time: '6 min',
+    emoji: '📊',
+    img: '',
+    link: '#',
+  },
+];
+
+/* ════════════════════════════════════════════════════════
+   ESTADO
+════════════════════════════════════════════════════════ */
+let currentCat = 'todos';
+let cart = [];
+
+/* ════════════════════════════════════════════════════════
+   HERO SLIDESHOW
+════════════════════════════════════════════════════════ */
+let currentSlide = 0;
+const SLIDES = document.querySelectorAll('.hero-slide');
+const DOTS   = document.querySelectorAll('.hero-dot');
+
+function goSlide(n) {
+  SLIDES[currentSlide].classList.remove('active');
+  DOTS[currentSlide].classList.remove('active');
+  currentSlide = (n + SLIDES.length) % SLIDES.length;
+  SLIDES[currentSlide].classList.add('active');
+  DOTS[currentSlide].classList.add('active');
+}
+
+setInterval(() => goSlide(currentSlide + 1), 4000);
+
+/* ════════════════════════════════════════════════════════
+   NAV
+════════════════════════════════════════════════════════ */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 30);
+  // active nav link
+  const ids = ['inicio','tienda','recursos','noticias','nosotros','contacto'];
+  const links = document.querySelectorAll('.nav-center a');
+  let active = 'tienda';
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && scrollY >= el.offsetTop - 100) active = id;
+  });
+  links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === `#${active}`));
+});
+
+function toggleMobileNav() { document.getElementById('mobileNav').classList.toggle('open'); }
+function closeMobileNav()  { document.getElementById('mobileNav').classList.remove('open'); }
+
+/* ════════════════════════════════════════════════════════
+   TIENDA
+════════════════════════════════════════════════════════ */
+function fmtPrice(n) {
+  return '₲ ' + n.toLocaleString('es-PY');
+}
+
+function filterCat(cat) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase().includes(cat) || cat === 'todos' && b.textContent.includes('Todos'));
+  });
+  document.getElementById('tienda').scrollIntoView({ behavior: 'smooth' });
+  renderProducts();
+}
+
+function renderProducts() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const grid = document.getElementById('productsGrid');
+
+  const filtered = PRODUCTS.filter(p => {
+    const matchCat = currentCat === 'todos' || p.cat === currentCat;
+    const matchQ   = !q || p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+
+  document.getElementById('shopCount').textContent = `${filtered.length} producto${filtered.length !== 1 ? 's' : ''}`;
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="no-results"><div class="icon">🔍</div><p>No encontramos productos con ese criterio.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(p => {
+    const badgeHtml = p.badge
+      ? `<span class="product-badge badge-${p.badge}">${p.badge === 'new' ? 'Nuevo' : p.badge === 'sale' ? 'Oferta' : 'Top'}</span>` : '';
+
+    const imgHtml = p.img
+      ? `<img src="${p.img}" alt="${p.name}" loading="lazy">`
+      : `<div class="product-img-placeholder">${p.emoji}</div>`;
+
+    const oldPriceHtml = p.oldPrice
+      ? `<span class="product-price-old">${fmtPrice(p.oldPrice)}</span>` : '';
+
+    return `<div class="product-card fade-up visible">
+      ${badgeHtml}
+      <div class="product-img-wrap">${imgHtml}</div>
+      <div class="product-body">
+        <div class="product-cat">${p.cat.toUpperCase()}</div>
+        <div class="product-name">${p.name}</div>
+        <p class="product-desc">${p.desc}</p>
+        <div class="product-footer">
+          <div>
+            <span class="product-price">${fmtPrice(p.price)}</span>
+            ${oldPriceHtml}
+          </div>
+          <button class="add-cart-btn" onclick="addToCart(${p.id})" title="Agregar al carrito">+</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ════════════════════════════════════════════════════════
+   NOTICIAS
+════════════════════════════════════════════════════════ */
+function renderNews() {
+  document.getElementById('newsGrid').innerHTML = NEWS.map(n => {
+    const thumbContent = n.img
+      ? `<img src="${n.img}" alt="${n.title}" loading="lazy"><div class="news-thumb-overlay"></div>`
+      : `<div style="font-size:52px;opacity:.3">${n.emoji}</div><div class="news-thumb-overlay"></div>`;
+
+    return `<a href="${n.link}" class="news-card fade-up">
+      <div class="news-thumb">
+        ${thumbContent}
+        <span class="news-cat">${n.cat}</span>
+      </div>
+      <div class="news-body">
+        <div class="news-date">${n.date}</div>
+        <div class="news-title">${n.title}</div>
+        <p class="news-excerpt">${n.excerpt}</p>
+        <div class="news-footer">
+          <span class="news-read">Leer artículo →</span>
+          <span class="news-time">${n.time} lectura</span>
+        </div>
+      </div>
+    </a>`;
+  }).join('');
+  observeFadeUps();
+}
+
+/* ════════════════════════════════════════════════════════
+   CARRITO
+════════════════════════════════════════════════════════ */
+function addToCart(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  const existing = cart.find(x => x.id === id);
+  if (existing) existing.qty++;
+  else cart.push({ ...p, qty: 1 });
+  updateCartUI();
+  showToast(`✓ ${p.name} agregado al carrito`);
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(x => x.id !== id);
+  updateCartUI();
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(x => x.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) removeFromCart(id);
+  else updateCartUI();
+}
+
+function updateCartUI() {
+  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  const count = cart.reduce((s, x) => s + x.qty, 0);
+
+  // Badge
+  const badge = document.getElementById('cartCount');
+  badge.textContent = count;
+  badge.classList.toggle('show', count > 0);
+
+  // Items
+  const container = document.getElementById('cartItems');
+  const foot = document.getElementById('cartFoot');
+
+  if (!cart.length) {
+    container.innerHTML = `<div class="cart-empty">
+      <div class="cart-empty-icon">🛒</div>
+      <p>Tu carrito está vacío.<br>Agregá productos desde la tienda.</p>
+    </div>`;
+    foot.style.display = 'none';
+    return;
+  }
+
+  foot.style.display = 'flex';
+  document.getElementById('cartTotal').textContent = fmtPrice(total);
+
+  container.innerHTML = cart.map(item => {
+    const imgHtml = item.img
+      ? `<img src="${item.img}" alt="${item.name}">`
+      : item.emoji;
+
+    return `<div class="cart-item">
+      <div class="cart-item-img">${imgHtml}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">${fmtPrice(item.price)}</div>
+        <div class="cart-item-controls">
+          <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+        </div>
+      </div>
+      <button class="cart-item-del" onclick="removeFromCart(${item.id})" title="Eliminar">🗑</button>
+    </div>`;
+  }).join('');
+}
+
+function openCart()  {
+  document.getElementById('cartSidebar').classList.add('open');
+  document.getElementById('cartOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCart() {
+  document.getElementById('cartSidebar').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ════════════════════════════════════════════════════════
+   FINALIZAR PEDIDO POR WHATSAPP
+   
+   El mensaje se construye automáticamente con los
+   productos del carrito. Podés editar el número de
+   WhatsApp en la línea: const WA_NUMBER = '595981000000'
+════════════════════════════════════════════════════════ */
+function orderWhatsApp() {
+  if (!cart.length) return;
+
+  const WA_NUMBER = '595981000000'; /* ← TU NÚMERO AQUÍ (sin + ni espacios) */
+
+  const lines = cart.map(item =>
+    `• ${item.name} x${item.qty} — ${fmtPrice(item.price * item.qty)}`
+  );
+  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+
+  const msg = [
+    '🛒 *Pedido desde Torke Shop*',
+    '',
+    ...lines,
+    '',
+    `*Total estimado: ${fmtPrice(total)}*`,
+    '',
+    'Por favor confirmar disponibilidad y forma de entrega. ¡Gracias!'
+  ].join('\n');
+
+  const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+/* ════════════════════════════════════════════════════════
+   TOAST
+════════════════════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ════════════════════════════════════════════════════════
+   INTERSECTION OBSERVER (fade-up)
+════════════════════════════════════════════════════════ */
+function observeFadeUps() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.fade-up:not(.visible)').forEach(el => obs.observe(el));
+}
+
+/* ════════════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════════════ */
+renderProducts();
+renderNews();
+updateCartUI();
+observeFadeUps();
+</script>
+</body>
+</html>

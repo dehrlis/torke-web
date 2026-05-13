@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Operaciones — Torke.com</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0A0D12;
+  --s1: #0F1318;
+  --s2: #161C24;
+  --s3: #1D2530;
+  --teal: #00D2BE;
+  --teal2: rgba(0,210,190,.1);
+  --white: #EDF0F4;
+  --silver: #8A9BB0;
+  --silver2: #546070;
+  --border: #1E2830;
+  --border2: #273040;
+  --yellow: #F5C518;
+  --red: #E8303A;
+  --green: #22C55E;
+  --pad: clamp(20px,5vw,60px);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--white);line-height:1.7;-webkit-font-smoothing:antialiased;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--s1);} ::-webkit-scrollbar-thumb{background:var(--teal);border-radius:2px;}
+a{color:var(--teal);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* LAYOUT */
+.sidebar{
+  position:fixed;top:0;left:0;width:260px;height:100vh;
+  background:var(--s1);border-right:1px solid var(--border);
+  overflow-y:auto;padding:24px 20px;z-index:100;
+}
+@media(max-width:900px){.sidebar{display:none;}}
+.content{margin-left:260px;padding:0 var(--pad) 80px;max-width:900px;}
+@media(max-width:900px){.content{margin-left:0;}}
+
+/* SIDEBAR */
+.sidebar-logo{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;
+  font-size:18px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--white);margin-bottom:4px;
+  display:flex;align-items:center;gap:8px;
+}
+.sidebar-logo span{color:var(--teal);}
+.sidebar-sub{font-size:10px;color:var(--silver2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:28px;}
+.nav-group{margin-bottom:24px;}
+.nav-group-title{
+  font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--silver2);margin-bottom:8px;padding:0 8px;
+}
+.nav-link{
+  display:block;font-size:13px;color:var(--silver);
+  padding:7px 10px;border-radius:6px;transition:all .2s;margin-bottom:2px;
+}
+.nav-link:hover{color:var(--white);background:var(--s2);text-decoration:none;}
+.nav-link.active{color:var(--teal);background:rgba(0,210,190,.08);}
+
+/* HERO */
+.manual-hero{
+  padding:60px 0 48px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:56px;
+}
+.manual-hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--teal);margin-bottom:16px;
+}
+.manual-hero-tag::before{content:'';width:16px;height:2px;background:var(--teal);}
+.manual-hero h1{
+  font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,64px);
+  font-weight:900;letter-spacing:-2px;text-transform:uppercase;line-height:.95;
+  margin-bottom:16px;
+}
+.manual-hero h1 em{font-style:normal;color:var(--teal);}
+.manual-hero p{font-size:15px;color:var(--silver);max-width:520px;font-weight:300;}
+
+/* SECTIONS */
+.section{margin-bottom:72px;scroll-margin-top:32px;}
+.section-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--teal);letter-spacing:2px;
+  margin-bottom:8px;display:block;
+}
+.section h2{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(24px,4vw,36px);font-weight:900;text-transform:uppercase;
+  letter-spacing:-1px;margin-bottom:24px;padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+.section h3{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:20px;font-weight:700;text-transform:uppercase;
+  color:var(--white);margin:28px 0 12px;
+  display:flex;align-items:center;gap:10px;
+}
+.section h3::before{
+  content:'';width:4px;height:16px;background:var(--teal);
+  border-radius:2px;flex-shrink:0;
+}
+.section p{font-size:14px;color:var(--silver);margin-bottom:14px;font-weight:300;}
+.section p strong{color:var(--white);font-weight:600;}
+.section ul,.section ol{padding-left:20px;margin-bottom:16px;}
+.section li{font-size:14px;color:var(--silver);margin-bottom:6px;font-weight:300;}
+.section li strong{color:var(--white);font-weight:600;}
+
+/* CALLOUTS */
+.callout{
+  border-radius:8px;padding:16px 20px;margin:20px 0;
+  display:flex;gap:14px;align-items:flex-start;
+}
+.callout-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+.callout-body{flex:1;}
+.callout-title{font-size:13px;font-weight:700;margin-bottom:4px;}
+.callout-text{font-size:13px;font-weight:300;line-height:1.6;}
+.callout.info{background:rgba(0,210,190,.08);border:1px solid rgba(0,210,190,.2);}
+.callout.info .callout-title{color:var(--teal);}
+.callout.warn{background:rgba(245,197,24,.07);border:1px solid rgba(245,197,24,.2);}
+.callout.warn .callout-title{color:var(--yellow);}
+.callout.tip{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);}
+.callout.tip .callout-title{color:var(--green);}
+
+/* CODE */
+code{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;background:var(--s2);
+  border:1px solid var(--border2);
+  padding:2px 7px;border-radius:4px;color:var(--teal);
+}
+pre{
+  background:var(--s2);border:1px solid var(--border2);
+  border-radius:8px;padding:20px;overflow-x:auto;
+  margin:16px 0;position:relative;
+}
+pre code{
+  background:none;border:none;padding:0;
+  color:var(--white);font-size:12px;line-height:1.7;
+}
+.code-label{
+  position:absolute;top:12px;right:12px;
+  font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--silver2);
+}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:4px;margin:20px 0;}
+.step{
+  display:flex;gap:16px;align-items:flex-start;
+  padding:16px;background:var(--s2);border:1px solid var(--border);
+  border-radius:8px;
+}
+.step-num{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;
+  font-size:22px;color:var(--teal);line-height:1;flex-shrink:0;
+  min-width:28px;
+}
+.step-content{}
+.step-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:4px;}
+.step-desc{font-size:13px;color:var(--silver);font-weight:300;line-height:1.5;}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{
+  text-align:left;padding:10px 14px;
+  background:var(--s2);border-bottom:1px solid var(--border2);
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--silver2);font-family:'Barlow Condensed',sans-serif;
+}
+td{
+  padding:10px 14px;border-bottom:1px solid var(--border);
+  color:var(--silver);vertical-align:top;
+}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--s2);}
+td code{font-size:11px;}
+
+/* FOLDER TREE */
+.tree{
+  background:var(--s2);border:1px solid var(--border2);
+  border-radius:8px;padding:20px;margin:16px 0;
+  font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.9;
+}
+.tree .dir{color:var(--teal);}
+.tree .file{color:var(--white);}
+.tree .comment{color:var(--silver2);}
+
+/* BADGE */
+.badge{
+  display:inline-flex;align-items:center;
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle;
+}
+.badge-req{background:rgba(232,48,58,.15);color:var(--red);border:1px solid rgba(232,48,58,.3);}
+.badge-opt{background:rgba(0,210,190,.12);color:var(--teal);border:1px solid rgba(0,210,190,.25);}
+
+/* IMAGE SPEC CARD */
+.img-spec{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:12px;margin:16px 0;
+}
+.img-spec-card{
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:8px;padding:16px;
+}
+.img-spec-icon{font-size:28px;margin-bottom:8px;}
+.img-spec-name{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;font-weight:700;text-transform:uppercase;
+  color:var(--white);margin-bottom:6px;
+}
+.img-spec-detail{font-size:11px;color:var(--silver2);line-height:1.7;}
+.img-spec-detail strong{color:var(--silver);display:block;}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">Taller <span>Torke</span></div>
+  <div class="sidebar-sub">Manual de operaciones</div>
+
+  <nav>
+    <div class="nav-group">
+      <div class="nav-group-title">Inicio</div>
+      <a href="#estructura" class="nav-link">Estructura de archivos</a>
+      <a href="#publicar" class="nav-link">Publicar en Netlify</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Tienda</div>
+      <a href="#productos" class="nav-link">Agregar productos</a>
+      <a href="#categorias" class="nav-link">Categorías</a>
+      <a href="#precios" class="nav-link">Precios y badges</a>
+      <a href="#whatsapp" class="nav-link">Número de WhatsApp</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Imágenes</div>
+      <a href="#img-hero" class="nav-link">Fotos de portada (hero)</a>
+      <a href="#img-productos" class="nav-link">Fotos de productos</a>
+      <a href="#img-noticias" class="nav-link">Miniaturas noticias</a>
+      <a href="#img-taller" class="nav-link">Foto del taller</a>
+      <a href="#img-specs" class="nav-link">Especificaciones</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Contenido</div>
+      <a href="#noticias" class="nav-link">Agregar noticias</a>
+      <a href="#fluidos" class="nav-link">Agregar vehículos FluidDB</a>
+      <a href="#textos" class="nav-link">Editar textos</a>
+      <a href="#contacto" class="nav-link">Datos de contacto</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Avanzado</div>
+      <a href="#dominio" class="nav-link">Dominio y DNS</a>
+      <a href="#actualizaciones" class="nav-link">Actualizar el sitio</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- CONTENT -->
+<main class="content">
+
+  <div class="manual-hero">
+    <div class="manual-hero-tag">Documentación oficial</div>
+    <h1>Manual de<br><em>Operaciones</em></h1>
+    <p>Guía completa para gestionar, actualizar y publicar el sitio web de Taller Torke. Sin conocimientos de programación necesarios para las tareas cotidianas.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       ESTRUCTURA
+  ═══════════════════════════════════════ -->
+  <section class="section" id="estructura">
+    <span class="section-num">01 — ESTRUCTURA</span>
+    <h2>Estructura de Archivos</h2>
+
+    <p>El sitio está compuesto por archivos estáticos. Esta es la estructura completa que tenés que subir a Netlify:</p>
+
+    <div class="tree">
+<span class="dir">📁 torke-site/</span>          <span class="comment">← Esta carpeta es la que subís a Netlify</span>
+│
+├── <span class="file">index.html</span>            <span class="comment">← Página principal (tienda, recursos, etc.)</span>
+├── <span class="file">fluidos.html</span>          <span class="comment">← Módulo FluidDB (fluidos y capacidades)</span>
+├── <span class="file">_redirects</span>            <span class="comment">← Configuración de URLs para Netlify</span>
+├── <span class="file">MANUAL.html</span>           <span class="comment">← Este archivo (no se sube, es local)</span>
+│
+└── <span class="dir">📁 img/</span>                <span class="comment">← Todas las imágenes del sitio</span>
+    ├── <span class="dir">📁 hero/</span>           <span class="comment">← Fotos del slideshow de portada</span>
+    │   ├── <span class="file">hero-1.jpg</span>
+    │   ├── <span class="file">hero-2.jpg</span>
+    │   └── <span class="file">hero-3.jpg</span>
+    ├── <span class="dir">📁 productos/</span>      <span class="comment">← Fotos del catálogo de productos</span>
+    │   ├── <span class="file">castrol-5w30.jpg</span>
+    │   └── <span class="file">filtro-toyota.jpg</span>
+    ├── <span class="dir">📁 noticias/</span>       <span class="comment">← Miniaturas del blog</span>
+    │   └── <span class="file">aceite-diesel.jpg</span>
+    └── <span class="file">taller.jpg</span>         <span class="comment">← Foto sección "Sobre nosotros"</span>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-icon">ℹ️</div>
+      <div class="callout-body">
+        <div class="callout-title">¿Por qué se llama index.html?</div>
+        <div class="callout-text">Cuando alguien escribe <strong>torke.com</strong> en el navegador, el servidor busca automáticamente un archivo llamado <code>index.html</code>. Si no existe, da error. Por eso el archivo principal siempre debe llamarse así.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       PUBLICAR
+  ═══════════════════════════════════════ -->
+  <section class="section" id="publicar">
+    <span class="section-num">02 — PUBLICACIÓN</span>
+    <h2>Publicar en Netlify</h2>
+
+    <p>Netlify es la plataforma donde va a vivir el sitio. Es gratuita para sitios estáticos como el de Torke.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Crear cuenta en Netlify</div>
+          <div class="step-desc">Entrá a <strong>netlify.com</strong> → Sign up → podés registrarte con tu email de Gmail. No requiere tarjeta de crédito para empezar.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Subir el sitio</div>
+          <div class="step-desc">En el dashboard de Netlify, buscá la opción <strong>"Add new site"</strong> → <strong>"Deploy manually"</strong>. Aparece una zona de drag & drop. Arrastrá la carpeta <code>torke-site</code> completa ahí. En segundos el sitio queda publicado en una URL temporal como <code>random-name.netlify.app</code>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Comprar el dominio</div>
+          <div class="step-desc">Desde el panel de tu sitio en Netlify → <strong>Domain management</strong> → <strong>Add a domain</strong> → <strong>Buy a new domain</strong>. Escribís <code>torke.com</code>, si está disponible lo comprás con tarjeta. Cuesta aprox. $15 USD/año. Netlify configura automáticamente el HTTPS.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">¡Listo!</div>
+          <div class="step-desc">En 5–10 minutos <strong>torke.com</strong> apunta a tu sitio con HTTPS activo. No necesitás tocar ninguna configuración adicional.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Actualizar el sitio después de cambios</h3>
+    <p>Cada vez que modifiques archivos (productos, imágenes, textos), necesitás volver a subir la carpeta a Netlify:</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Entrás a tu sitio en Netlify</div>
+          <div class="step-desc">app.netlify.com → tu sitio → pestaña <strong>Deploys</strong>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Drag & drop de la carpeta actualizada</div>
+          <div class="step-desc">En la zona de deploys hay un área que dice "Drag and drop your site output folder here". Arrastrás la carpeta <code>torke-site</code> completa nuevamente.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Deploy automático</div>
+          <div class="step-desc">Netlify detecta los cambios y actualiza el sitio en segundos. torke.com muestra la versión nueva sin tiempo de inactividad.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       PRODUCTOS
+  ═══════════════════════════════════════ -->
+  <section class="section" id="productos">
+    <span class="section-num">03 — TIENDA</span>
+    <h2>Agregar Productos al Catálogo</h2>
+
+    <p>Todos los productos se gestionan en el archivo <code>index.html</code>. Abrís el archivo con cualquier editor de texto (Notepad++, VS Code, o hasta el Bloc de notas de Windows).</p>
+
+    <div class="callout tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body">
+        <div class="callout-title">Editor recomendado: Notepad++</div>
+        <div class="callout-text">Es gratis, en español, y resalta el código con colores. Descargalo en <strong>notepad-plus-plus.org</strong>. Hacé Ctrl+F para buscar texto dentro del archivo.</div>
+      </div>
+    </div>
+
+    <h3>Cómo encontrar la lista de productos</h3>
+    <p>Abrís <code>index.html</code> con tu editor y buscás (Ctrl+F) el texto:</p>
+    <pre><code>const PRODUCTS = [</code></pre>
+    <p>Ahí empieza el array con todos los productos. Cada producto tiene esta estructura:</p>
+
+    <pre><code class="code-label">Estructura de un producto</code><code>{
+  id: 1,                           // ← Número único, no repetir
+  name: 'Castrol GTX 10W-40 4L',  // ← Nombre del producto
+  cat: 'lubricantes',              // ← Categoría (ver lista abajo)
+  desc: 'Descripción corta...',    // ← Texto que aparece en la tarjeta
+  price: 120000,                   // ← Precio en guaraníes (sin puntos)
+  oldPrice: null,                  // ← Precio anterior (para mostrar tachado)
+                                   //   null = no mostrar precio anterior
+  emoji: '🛢️',                     // ← Emoji que aparece si no hay foto
+  img: '',                         // ← Ruta de la imagen (ver sección fotos)
+  badge: 'hot',                    // ← 'new' | 'sale' | 'hot' | ''
+},</code></pre>
+
+    <h3>Agregar un producto nuevo</h3>
+    <p>Copiás el bloque de arriba, lo pegás ANTES del corchete de cierre <code>];</code> del array, y completás los datos. Ejemplo:</p>
+
+    <pre><code>  // ← El último producto ya existente termina aquí con ,
+  {
+    id: 15,
+    name: 'Aceite Repsol 5W-40 4L',
+    cat: 'lubricantes',
+    desc: 'Aceite sintético de alto rendimiento. API SN/CF. Para motores exigentes.',
+    price: 210000,
+    oldPrice: 240000,
+    emoji: '🛢️',
+    img: 'img/productos/repsol-5w40.jpg',
+    badge: 'sale',
+  },
+];</code></pre>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <div class="callout-title">Importante: IDs únicos</div>
+        <div class="callout-text">Cada producto debe tener un <code>id</code> diferente. Si repetís un número, el carrito puede tener errores. Simplemente seguí la numeración: si el último es 14, el nuevo es 15.</div>
+      </div>
+    </div>
+
+    <h3>Eliminar un producto</h3>
+    <p>Buscás el bloque del producto (por su nombre o ID) y borrás todo desde la llave de apertura <code>{</code> hasta la llave de cierre <code>},</code> inclusive. Guardás y listo.</p>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       CATEGORÍAS
+  ═══════════════════════════════════════ -->
+  <section class="section" id="categorias">
+    <span class="section-num">04 — CATEGORÍAS</span>
+    <h2>Categorías de Productos</h2>
+
+    <p>El campo <code>cat</code> de cada producto debe ser exactamente una de estas opciones (en minúsculas, sin acentos):</p>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th>Valor en cat</th><th>Etiqueta visible</th><th>Emoji</th></tr>
+        <tr><td><code>lubricantes</code></td><td>🛢️ Lubricantes</td><td>🛢️</td></tr>
+        <tr><td><code>filtros</code></td><td>🔄 Filtros</td><td>🔄</td></tr>
+        <tr><td><code>repuestos</code></td><td>⚙️ Repuestos</td><td>⚙️</td></tr>
+        <tr><td><code>frenos</code></td><td>🔴 Frenos</td><td>🔴</td></tr>
+        <tr><td><code>electrico</code></td><td>⚡ Eléctrico</td><td>⚡</td></tr>
+        <tr><td><code>accesorios</code></td><td>🧰 Accesorios</td><td>🧰</td></tr>
+      </table>
+    </div>
+
+    <h3>Agregar una categoría nueva</h3>
+    <p>Si necesitás una categoría que no existe (por ejemplo "Refrigerantes"), hay que hacer dos cambios en <code>index.html</code>:</p>
+    <p><strong>1.</strong> Buscá (Ctrl+F) el texto <code>class="cat-bar"</code> y agregás un botón nuevo dentro:</p>
+    <pre><code>&lt;button class="cat-btn" onclick="filterCat('refrigerantes')"&gt;🧊 Refrigerantes&lt;/button&gt;</code></pre>
+    <p><strong>2.</strong> En los productos que correspondan, usás <code>cat: 'refrigerantes'</code>.</p>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       PRECIOS
+  ═══════════════════════════════════════ -->
+  <section class="section" id="precios">
+    <span class="section-num">05 — PRECIOS Y BADGES</span>
+    <h2>Precios y Badges</h2>
+
+    <h3>Precios</h3>
+    <p>Los precios se ingresan en <strong>guaraníes</strong>, como número entero sin puntos ni comas:</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Lo que escribís</th><th>Lo que muestra</th></tr>
+        <tr><td><code>price: 120000</code></td><td>₲ 120.000</td></tr>
+        <tr><td><code>price: 1500000</code></td><td>₲ 1.500.000</td></tr>
+        <tr><td><code>oldPrice: null</code></td><td>No muestra precio anterior</td></tr>
+        <tr><td><code>oldPrice: 150000</code></td><td>₲ 150.000 (tachado)</td></tr>
+      </table>
+    </div>
+
+    <h3>Badges (etiquetas)</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Valor</th><th>Etiqueta</th><th>Color</th><th>Cuándo usar</th></tr>
+        <tr><td><code>'new'</code></td><td>NUEVO</td><td>Teal</td><td>Producto recién agregado</td></tr>
+        <tr><td><code>'sale'</code></td><td>OFERTA</td><td>Rojo</td><td>Precio rebajado (usar con oldPrice)</td></tr>
+        <tr><td><code>'hot'</code></td><td>TOP</td><td>Amarillo</td><td>Más vendido o destacado</td></tr>
+        <tr><td><code>''</code></td><td>(ninguno)</td><td>—</td><td>Producto normal sin etiqueta</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       WHATSAPP
+  ═══════════════════════════════════════ -->
+  <section class="section" id="whatsapp">
+    <span class="section-num">06 — WHATSAPP</span>
+    <h2>Número de WhatsApp</h2>
+
+    <p>El número de WhatsApp aparece en varios lugares del sitio. Para cambiarlo, en <code>index.html</code> buscás (Ctrl+F):</p>
+    <pre><code>595981000000</code></pre>
+    <p>Reemplazás <strong>todas las ocurrencias</strong> (Ctrl+H en Notepad++) con tu número real, en formato internacional sin <code>+</code> ni espacios:</p>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th>Formato</th><th>Ejemplo</th></tr>
+        <tr><td>Con código de Paraguay</td><td><code>595981234567</code></td></tr>
+        <tr><td>Sin guiones ni espacios</td><td><code>595981234567</code> ✅</td></tr>
+        <tr><td>Con + o espacios</td><td><code>+595 981 234 567</code> ❌</td></tr>
+      </table>
+    </div>
+
+    <p>El número también aparece en la función <code>orderWhatsApp()</code>. Buscás:</p>
+    <pre><code>const WA_NUMBER = '595981000000';</code></pre>
+    <p>Y reemplazás con tu número.</p>
+
+    <h3>Mensaje de WhatsApp al finalizar pedido</h3>
+    <p>Cuando el cliente hace clic en "Finalizar pedido", se genera automáticamente un mensaje así:</p>
+    <pre><code>🛒 *Pedido desde Torke Shop*
+
+• Castrol GTX 10W-40 4L x2 — ₲ 240.000
+• Filtro de Aceite Toyota OEM x1 — ₲ 38.000
+
+*Total estimado: ₲ 278.000*
+
+Por favor confirmar disponibilidad y forma de entrega. ¡Gracias!</code></pre>
+    <p>Podés editar el texto del mensaje buscando en el JS la función <code>orderWhatsApp()</code>.</p>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       IMÁGENES HERO
+  ═══════════════════════════════════════ -->
+  <section class="section" id="img-hero">
+    <span class="section-num">07 — IMÁGENES HERO</span>
+    <h2>Fotos de Portada (Slideshow)</h2>
+
+    <p>El slideshow de la página principal tiene 3 slides. Cada uno tiene su propia foto de fondo.</p>
+
+    <div class="img-spec">
+      <div class="img-spec-card">
+        <div class="img-spec-icon">🖼️</div>
+        <div class="img-spec-name">Slide 1</div>
+        <div class="img-spec-detail">
+          <strong>Archivo:</strong> img/hero/hero-1.jpg
+          <strong>Tamaño:</strong> 900 × 700 px mínimo
+          <strong>Formato:</strong> JPG o WebP
+          <strong>Sugerencia:</strong> Foto del taller o de productos lubricantes
+        </div>
+      </div>
+      <div class="img-spec-card">
+        <div class="img-spec-icon">🖼️</div>
+        <div class="img-spec-name">Slide 2</div>
+        <div class="img-spec-detail">
+          <strong>Archivo:</strong> img/hero/hero-2.jpg
+          <strong>Tamaño:</strong> 900 × 700 px mínimo
+          <strong>Formato:</strong> JPG o WebP
+          <strong>Sugerencia:</strong> Foto de filtros o herramientas
+        </div>
+      </div>
+      <div class="img-spec-card">
+        <div class="img-spec-icon">🖼️</div>
+        <div class="img-spec-name">Slide 3</div>
+        <div class="img-spec-detail">
+          <strong>Archivo:</strong> img/hero/hero-3.jpg
+          <strong>Tamaño:</strong> 900 × 700 px mínimo
+          <strong>Formato:</strong> JPG o WebP
+          <strong>Sugerencia:</strong> Foto de repuestos o autos
+        </div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Preparar la foto</div>
+          <div class="step-desc">La foto puede ser tomada con el celular. Idealmente horizontal (landscape). Evitá fotos muy oscuras, el texto encima necesita contraste.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Guardar con el nombre correcto</div>
+          <div class="step-desc">Renombrás la foto como <code>hero-1.jpg</code> y la copiás a la carpeta <code>img/hero/</code>. Reemplazás el archivo placeholder que ya estaba.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Descomentar la línea en el CSS</div>
+          <div class="step-desc">En <code>index.html</code> buscás <code>/* IMG-HERO-1 */</code> y en la línea de abajo eliminás el <code>/*</code> y <code>*/</code> que rodean la línea <code>background-image:url('img/hero/hero-1.jpg');</code></div>
+        </div>
+      </div>
+    </div>
+
+    <p>Antes del cambio:</p>
+    <pre><code>/* background-image:url('img/hero/hero-1.jpg'); */</code></pre>
+    <p>Después del cambio:</p>
+    <pre><code>background-image:url('img/hero/hero-1.jpg');</code></pre>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       IMÁGENES PRODUCTOS
+  ═══════════════════════════════════════ -->
+  <section class="section" id="img-productos">
+    <span class="section-num">08 — IMÁGENES PRODUCTOS</span>
+    <h2>Fotos de Productos</h2>
+
+    <div class="callout info">
+      <div class="callout-icon">📸</div>
+      <div class="callout-body">
+        <div class="callout-title">Especificación recomendada</div>
+        <div class="callout-text">Tamaño: <strong>600 × 600 px</strong> (cuadrada). Formato: JPG o WebP. Fondo: blanco o neutro. Peso máximo: 200 KB por imagen.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Fotografiar o descargar la imagen</div>
+          <div class="step-desc">Podés fotografiar el producto sobre una superficie limpia, o usar la foto del proveedor/fabricante. Procurá que el producto se vea claro y centrado.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Nombrar el archivo</div>
+          <div class="step-desc">Usá nombres descriptivos sin espacios ni caracteres especiales. Ejemplos: <code>castrol-5w30-4l.jpg</code>, <code>filtro-toyota-90915.jpg</code>, <code>bateria-60ah.jpg</code></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Copiar a la carpeta</div>
+          <div class="step-desc">Guardás la imagen en <code>torke-site/img/productos/</code></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Vincular al producto en el JS</div>
+          <div class="step-desc">En el objeto del producto en <code>index.html</code>, completás el campo <code>img</code>:</div>
+        </div>
+      </div>
+    </div>
+
+    <pre><code>img: 'img/productos/castrol-5w30-4l.jpg',</code></pre>
+
+    <div class="callout tip">
+      <div class="callout-icon">🌐</div>
+      <div class="callout-body">
+        <div class="callout-title">También podés usar URLs externas</div>
+        <div class="callout-text">Si tenés las fotos en Google Drive, Dropbox o cualquier CDN, podés pegar la URL directa:<br><code>img: 'https://drive.google.com/uc?id=XXXXX',</code></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       IMÁGENES NOTICIAS
+  ═══════════════════════════════════════ -->
+  <section class="section" id="img-noticias">
+    <span class="section-num">09 — MINIATURAS NOTICIAS</span>
+    <h2>Miniaturas del Blog</h2>
+
+    <p>Cada noticia tiene una imagen de portada (miniatura) que aparece en la tarjeta del blog.</p>
+
+    <div class="callout info">
+      <div class="callout-icon">📸</div>
+      <div class="callout-body">
+        <div class="callout-title">Especificación</div>
+        <div class="callout-text">Tamaño: <strong>800 × 450 px</strong> (proporción 16:9). Formato: JPG. Peso máximo: 150 KB.</div>
+      </div>
+    </div>
+
+    <p>El campo a completar en el array <code>NEWS</code> es:</p>
+    <pre><code>img: 'img/noticias/aceite-diesel.jpg',</code></pre>
+
+    <p>Si no ponés imagen (<code>img: ''</code>), se muestra el emoji de la noticia centrado, que también se ve bien.</p>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       FOTO TALLER
+  ═══════════════════════════════════════ -->
+  <section class="section" id="img-taller">
+    <span class="section-num">10 — FOTO DEL TALLER</span>
+    <h2>Foto Sección "Sobre Nosotros"</h2>
+
+    <div class="callout info">
+      <div class="callout-icon">📸</div>
+      <div class="callout-body">
+        <div class="callout-title">Especificación</div>
+        <div class="callout-text">Archivo: <code>img/taller.jpg</code>. Tamaño: <strong>800 × 600 px</strong>. Puede ser horizontal o cuadrada. Sugerencia: foto del frente del taller, del equipo, o del interior.</div>
+      </div>
+    </div>
+
+    <p>Una vez que tenés la foto guardada en <code>img/taller.jpg</code>, en <code>index.html</code> buscás el comentario <code>nosotros-photo</code> y reemplazás el emoji por la imagen:</p>
+
+    <p>Buscás:</p>
+    <pre><code>&lt;div class="nosotros-photo"&gt;🔧&lt;/div&gt;</code></pre>
+    <p>Reemplazás con:</p>
+    <pre><code>&lt;div class="nosotros-photo"&gt;
+  &lt;img src="img/taller.jpg" alt="Taller Torke"
+       style="width:100%;height:100%;object-fit:cover;border-radius:14px;"&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SPECS IMÁGENES
+  ═══════════════════════════════════════ -->
+  <section class="section" id="img-specs">
+    <span class="section-num">11 — ESPECIFICACIONES</span>
+    <h2>Resumen de Especificaciones de Imágenes</h2>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th>Imagen</th><th>Carpeta</th><th>Tamaño ideal</th><th>Proporción</th><th>Peso máx.</th></tr>
+        <tr><td>Slides portada</td><td><code>img/hero/</code></td><td>900 × 700 px</td><td>Libre</td><td>300 KB</td></tr>
+        <tr><td>Fotos productos</td><td><code>img/productos/</code></td><td>600 × 600 px</td><td>1:1 cuadrada</td><td>200 KB</td></tr>
+        <tr><td>Miniaturas blog</td><td><code>img/noticias/</code></td><td>800 × 450 px</td><td>16:9</td><td>150 KB</td></tr>
+        <tr><td>Foto taller</td><td><code>img/</code></td><td>800 × 600 px</td><td>4:3</td><td>300 KB</td></tr>
+      </table>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-icon">⚡</div>
+      <div class="callout-body">
+        <div class="callout-title">Comprimir imágenes gratis</div>
+        <div class="callout-text">Antes de subir, comprimí las fotos en <strong>squoosh.app</strong> o <strong>tinypng.com</strong>. Reduce el peso sin perder calidad visible, haciendo el sitio más rápido.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       NOTICIAS
+  ═══════════════════════════════════════ -->
+  <section class="section" id="noticias">
+    <span class="section-num">12 — NOTICIAS</span>
+    <h2>Agregar Noticias al Blog</h2>
+
+    <p>Las noticias se gestionan en el array <code>NEWS</code> dentro de <code>index.html</code>. Buscás (Ctrl+F) el texto <code>const NEWS = [</code>.</p>
+
+    <p>Estructura de una noticia:</p>
+    <pre><code>{
+  id: 4,                                          // Número único
+  title: 'Título del artículo',                   // Título visible
+  excerpt: 'Descripción breve del contenido...',  // Texto corto (2-3 líneas)
+  cat: 'Mantenimiento',                           // Categoría (texto libre)
+  date: 'Junio 2025',                             // Fecha visible
+  time: '4 min',                                  // Tiempo de lectura
+  emoji: '🔧',                                    // Emoji si no hay foto
+  img: 'img/noticias/mi-articulo.jpg',            // Miniatura (opcional)
+  link: '#',                                      // URL del artículo completo
+},</code></pre>
+
+    <div class="callout info">
+      <div class="callout-icon">📝</div>
+      <div class="callout-body">
+        <div class="callout-title">Artículos completos</div>
+        <div class="callout-text">Por ahora el campo <code>link</code> apunta a <code>#</code> (la misma página). Cuando quieras publicar artículos completos, podés crear un archivo <code>blog/nombre-articulo.html</code> y apuntar ahí: <code>link: 'blog/aceite-diesel.html'</code></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       FLUIDOS
+  ═══════════════════════════════════════ -->
+  <section class="section" id="fluidos">
+    <span class="section-num">13 — FLUIDDB</span>
+    <h2>Agregar Vehículos al FluidDB</h2>
+
+    <p>El módulo FluidDB está en <code>fluidos.html</code>. Para agregar un vehículo nuevo, necesitás los datos del manual del propietario (o del sitio toyota-club.net) y agregarlo al array <code>DB</code>.</p>
+
+    <div class="callout tip">
+      <div class="callout-icon">🔗</div>
+      <div class="callout-body">
+        <div class="callout-title">Flujo de trabajo recomendado</div>
+        <div class="callout-text">Mandame el link de toyota-club.net del vehículo que querés agregar (como venimos haciendo en este chat) y yo extraigo los datos y te genero el bloque JSON listo para copiar y pegar.</div>
+      </div>
+    </div>
+
+    <p>La estructura de cada vehículo en el array <code>DB</code> dentro de <code>fluidos.html</code>:</p>
+    <pre><code>{
+  id: "camry_80",           // ID único (sin espacios)
+  brand: "Toyota",          // Marca
+  model: "Camry",           // Modelo
+  generation: "80",         // Generación o código
+  years: "2024-",           // Años
+  market: "us",             // jp | us | eu | au | cn | gen
+  variants: [
+    { code: "ASV80", engine: "A25A-FKS", displacement: "2.5i",
+      power_kw: 152, drive: "2WD", trans: "8AT" },
+  ],
+  fluids: {
+    engine_oil: [
+      { spec: "A25A-FKS", capacity_l: 5.0, type: "0W-20 API SN" }
+    ],
+    // ... demás sistemas
+  }
+},</code></pre>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       TEXTOS
+  ═══════════════════════════════════════ -->
+  <section class="section" id="textos">
+    <span class="section-num">14 — TEXTOS</span>
+    <h2>Editar Textos del Sitio</h2>
+
+    <p>Para cambiar textos, usás Ctrl+F en Notepad++ para encontrar el texto exacto y lo reemplazás.</p>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th>Texto a cambiar</th><th>Buscás</th></tr>
+        <tr><td>Slogan del hero</td><td><code>Repuestos, lubricantes y filtros</code></td></tr>
+        <tr><td>Texto "Sobre nosotros"</td><td><code>Taller Torke nació en Asunción</code></td></tr>
+        <tr><td>Años de experiencia</td><td><code>10 años</code> (dos ocurrencias)</td></tr>
+        <tr><td>Clientes atendidos</td><td><code>500+</code></td></tr>
+        <tr><td>Dirección</td><td><code>Asunción, Paraguay</code></td></tr>
+        <tr><td>Email</td><td><code>info@torke.com</code></td></tr>
+        <tr><td>Horarios</td><td><code>07:30 — 17:30</code></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       CONTACTO
+  ═══════════════════════════════════════ -->
+  <section class="section" id="contacto">
+    <span class="section-num">15 — DATOS DE CONTACTO</span>
+    <h2>Actualizar Datos de Contacto</h2>
+
+    <p>En <code>index.html</code>, buscás y reemplazás los siguientes datos con los reales:</p>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th>Campo</th><th>Valor actual (placeholder)</th><th>Reemplazar con</th></tr>
+        <tr><td>WhatsApp</td><td><code>595981000000</code></td><td>Tu número real</td></tr>
+        <tr><td>Teléfono</td><td><code>+595 21 000 000</code></td><td>Tu teléfono fijo</td></tr>
+        <tr><td>Email</td><td><code>info@torke.com</code></td><td>Tu email real</td></tr>
+        <tr><td>Dirección</td><td><code>Asunción, Paraguay</code></td><td>Tu dirección exacta</td></tr>
+        <tr><td>Google Maps</td><td><code>https://maps.google.com</code></td><td>Link a tu ubicación en Maps</td></tr>
+      </table>
+    </div>
+
+    <h3>Obtener link de Google Maps</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Abrís Google Maps</div>
+          <div class="step-desc">Buscás la ubicación de tu taller en maps.google.com</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Clic derecho → "¿Qué hay aquí?"</div>
+          <div class="step-desc">Aparece un panel en la parte inferior con la dirección exacta.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Compartir → Copiar enlace</div>
+          <div class="step-desc">En el panel de la ubicación, clic en el ícono de compartir → Copiar enlace. Ese link lo pegás reemplazando <code>https://maps.google.com</code> en el HTML.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       DOMINIO
+  ═══════════════════════════════════════ -->
+  <section class="section" id="dominio">
+    <span class="section-num">16 — DOMINIO</span>
+    <h2>Comprar el Dominio en Netlify</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Crear cuenta gratuita</div>
+          <div class="step-desc">Entrás a <strong>netlify.com</strong> → Sign up. Podés usar Gmail. No requiere tarjeta para empezar.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Subir el sitio</div>
+          <div class="step-desc"><strong>Add new site → Deploy manually</strong>. Arrastrás la carpeta <code>torke-site</code> completa al área de upload. En 30 segundos el sitio queda en una URL temporal.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Agregar dominio</div>
+          <div class="step-desc">En el panel del sitio → <strong>Domain management → Add a domain → Buy a new domain</strong>. Escribís <code>torke.com</code>, si está disponible lo comprás. Costo: ~$15 USD/año con tarjeta.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">HTTPS automático</div>
+          <div class="step-desc">Netlify configura automáticamente el certificado SSL. torke.com queda con HTTPS activo en 5-10 minutos, sin hacer nada más.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       ACTUALIZACIONES
+  ═══════════════════════════════════════ -->
+  <section class="section" id="actualizaciones">
+    <span class="section-num">17 — ACTUALIZACIONES</span>
+    <h2>Actualizar el Sitio</h2>
+
+    <p>Cada vez que modificás algo (nuevo producto, nueva foto, texto editado), seguís este proceso:</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Editás los archivos localmente</div>
+          <div class="step-desc">Modificás <code>index.html</code> o <code>fluidos.html</code> con Notepad++. Copiás las fotos nuevas a sus carpetas correspondientes.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Abrís Netlify</div>
+          <div class="step-desc">Entrás a <strong>app.netlify.com</strong> → tu sitio → pestaña <strong>Deploys</strong>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Subís la carpeta actualizada</div>
+          <div class="step-desc">En la zona de drag & drop de Deploys, arrastrás la carpeta <code>torke-site</code> completa. Netlify detecta los cambios y actualiza el sitio en segundos.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <div class="callout-title">Siempre subí la carpeta completa</div>
+        <div class="callout-text">No subas solo el archivo que modificaste — subí siempre la carpeta <code>torke-site</code> completa, con todos los archivos e imágenes. Si subís solo el HTML, las imágenes desaparecen del sitio.</div>
+      </div>
+    </div>
+
+    <h3>¿Cometiste un error?</h3>
+    <p>Netlify guarda el historial de todos los deploys anteriores. En la pestaña <strong>Deploys</strong> podés hacer clic en cualquier deploy anterior y elegir <strong>"Publish deploy"</strong> para volver a esa versión instantáneamente.</p>
+  </section>
+
+</main>
+
+<script>
+// Active nav link on scroll
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.nav-link');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
